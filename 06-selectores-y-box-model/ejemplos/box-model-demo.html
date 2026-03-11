@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Box Model - Demostración Visual</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #1a1a2e;
+            color: #eee;
+            padding: 30px;
+        }
+
+        h1 { text-align: center; margin-bottom: 30px; color: #e94560; }
+        h2 { color: #0f3460; background: #e94560; display: inline-block; padding: 5px 15px; border-radius: 4px; margin-bottom: 15px; color: white; }
+
+        /* --- DEMOSTRACIÓN BOX MODEL --- */
+        .box-demo {
+            background: #16213e;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .margin-layer {
+            background: rgba(233, 69, 96, 0.3);
+            padding: 25px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .border-layer {
+            border: 4px dashed #e94560;
+            padding: 25px;
+            border-radius: 6px;
+            background: rgba(15, 52, 96, 0.5);
+        }
+
+        .padding-layer {
+            background: rgba(0, 173, 181, 0.3);
+            padding: 25px;
+            border-radius: 4px;
+        }
+
+        .content-layer {
+            background: #0f3460;
+            padding: 20px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .label { font-size: 0.8rem; color: #aaa; margin-bottom: 5px; }
+
+        /* --- SELECTORES --- */
+        .selectores-demo {
+            background: #16213e;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .selectores-demo p { color: #ccc; margin: 8px 0; padding: 8px; border-radius: 4px; }
+        .selectores-demo .resaltado { background: #e94560; color: white; }
+        .selectores-demo #unico { background: #0f3460; border: 2px solid #00adb5; color: #00adb5; }
+        .selectores-demo p:hover { background: #333; cursor: pointer; }
+        .selectores-demo p:first-child { border-left: 4px solid #e94560; }
+        .selectores-demo p:last-child { border-left: 4px solid #00adb5; }
+
+        /* --- TABLA ZEBRA --- */
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { background: #e94560; color: white; padding: 12px; }
+        td { padding: 10px; border-bottom: 1px solid #333; }
+        tr:nth-child(even) { background: #16213e; }
+        tr:nth-child(odd) { background: #1a1a2e; }
+        tr:hover { background: #0f3460; }
+    </style>
+</head>
+<body>
+
+    <h1>🔲 Selectores y Box Model</h1>
+
+    <!-- BOX MODEL VISUAL -->
+    <div class="box-demo">
+        <h2>Box Model</h2>
+        <div class="margin-layer">
+            <p class="label">⬜ MARGIN (espacio exterior)</p>
+            <div class="border-layer">
+                <p class="label">🔲 BORDER</p>
+                <div class="padding-layer">
+                    <p class="label">🟦 PADDING (espacio interior)</p>
+                    <div class="content-layer">
+                        📄 CONTENT (contenido)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SELECTORES EN ACCIÓN -->
+    <div class="selectores-demo">
+        <h2>Selectores en Acción</h2>
+        <p>Soy un párrafo normal (selector de etiqueta) — primer hijo</p>
+        <p class="resaltado">Tengo la clase .resaltado (selector de clase)</p>
+        <p>Otro párrafo normal — pasa el mouse sobre mí (:hover)</p>
+        <p id="unico">Tengo el ID #unico (selector de ID)</p>
+        <p>Soy el último párrafo (:last-child)</p>
+    </div>
+
+    <!-- TABLA CON nth-child -->
+    <div class="box-demo">
+        <h2>Pseudo-clase :nth-child</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Selector</th>
+                    <th>Ejemplo</th>
+                    <th>Peso</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>1</td><td>Etiqueta</td><td>p { }</td><td>0-0-1</td></tr>
+                <tr><td>2</td><td>Clase</td><td>.clase { }</td><td>0-1-0</td></tr>
+                <tr><td>3</td><td>ID</td><td>#id { }</td><td>1-0-0</td></tr>
+                <tr><td>4</td><td>Inline</td><td>style=""</td><td>1-0-0-0</td></tr>
+                <tr><td>5</td><td>!important</td><td>color: red !important</td><td>Máxima</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>

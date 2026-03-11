@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enlaces e Imágenes - Ejemplo</title>
+</head>
+<body>
+
+    <header>
+        <h1>Mi Portafolio Web</h1>
+        <nav>
+            <a href="#sobre-mi">Sobre mí</a> |
+            <a href="#galeria">Galería</a> |
+            <a href="#enlaces">Enlaces útiles</a> |
+            <a href="#contacto">Contacto</a>
+        </nav>
+    </header>
+
+    <main>
+        <!-- SECCIÓN: SOBRE MÍ -->
+        <section id="sobre-mi">
+            <h2>Sobre Mí</h2>
+            <!-- Imagen con placeholder (reemplaza con tu foto) -->
+            <img 
+                src="https://via.placeholder.com/200x200?text=Mi+Foto" 
+                alt="Foto de perfil del estudiante"
+                width="200"
+                title="Esta es mi foto de perfil"
+            >
+            <p>¡Hola! Soy estudiante de la <strong>UPTP</strong> y estoy aprendiendo desarrollo web.</p>
+        </section>
+
+        <hr>
+
+        <!-- SECCIÓN: GALERÍA DE IMÁGENES -->
+        <section id="galeria">
+            <h2>Galería de Proyectos</h2>
+            <p>Algunos de mis trabajos:</p>
+
+            <!-- Imágenes con diferentes tamaños -->
+            <img 
+                src="https://via.placeholder.com/250x150?text=Proyecto+1" 
+                alt="Captura del proyecto 1"
+                width="250"
+            >
+            <img 
+                src="https://via.placeholder.com/250x150?text=Proyecto+2" 
+                alt="Captura del proyecto 2"
+                width="250"
+            >
+            <img 
+                src="https://via.placeholder.com/250x150?text=Proyecto+3" 
+                alt="Captura del proyecto 3"
+                width="250"
+            >
+        </section>
+
+        <hr>
+
+        <!-- SECCIÓN: ENLACES -->
+        <section id="enlaces">
+            <h2>Enlaces Útiles</h2>
+            <ul>
+                <li>
+                    <a href="https://developer.mozilla.org/es/" target="_blank" title="Documentación de MDN">
+                        MDN Web Docs ↗
+                    </a> — Documentación oficial de tecnologías web
+                </li>
+                <li>
+                    <a href="https://www.w3schools.com/" target="_blank" title="Tutoriales W3Schools">
+                        W3Schools ↗
+                    </a> — Tutoriales interactivos
+                </li>
+                <li>
+                    <a href="https://github.com/UPTP-Programacion" target="_blank">
+                        Nuestra organización en GitHub ↗
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Imagen como enlace -->
+            <p>Haz clic en el logo para ir a GitHub:</p>
+            <a href="https://github.com/UPTP-Programacion" target="_blank">
+                <img 
+                    src="https://via.placeholder.com/120x40?text=GitHub" 
+                    alt="Logo de GitHub - Ir a nuestra organización"
+                    title="Visitar GitHub"
+                >
+            </a>
+        </section>
+    </main>
+
+    <!-- PIE DE PÁGINA -->
+    <footer id="contacto">
+        <hr>
+        <h2>Contacto</h2>
+        <p>
+            <a href="mailto:estudiante@uptp.edu.ve">📧 estudiante@uptp.edu.ve</a>
+        </p>
+        <p>
+            <a href="#"><small>⬆️ Volver arriba</small></a>
+        </p>
+        <p><small>&copy; 2025 UPTP Programación</small></p>
+    </footer>
+
+</body>
+</html>

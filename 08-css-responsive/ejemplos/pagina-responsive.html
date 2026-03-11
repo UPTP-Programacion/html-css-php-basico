@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Responsive - Ejemplo</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+
+        /* --- NAVBAR --- */
+        nav {
+            background: #2c3e50;
+            color: white;
+            padding: 15px 20px;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .logo { font-weight: bold; font-size: 1.3rem; }
+
+        .nav-links {
+            display: none;    /* Oculto en móvil */
+            list-style: none;
+            gap: 15px;
+        }
+
+        .nav-links a {
+            color: #ccc;
+            text-decoration: none;
+        }
+
+        .nav-links a:hover { color: white; }
+
+        /* --- HERO --- */
+        .hero {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .hero h1 {
+            font-size: clamp(1.5rem, 5vw, 2.8rem);
+            margin-bottom: 10px;
+        }
+
+        .hero p { font-size: clamp(0.9rem, 2.5vw, 1.2rem); opacity: 0.9; }
+
+        /* --- CONTENIDO PRINCIPAL --- */
+        .contenido {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        .contenido h2 { text-align: center; margin-bottom: 25px; }
+
+        /* --- GRID DE TARJETAS --- */
+        .grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .tarjeta {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .tarjeta h3 { color: #667eea; margin-bottom: 8px; }
+
+        img { max-width: 100%; height: auto; border-radius: 6px; }
+
+        /* --- FOOTER --- */
+        footer {
+            background: #2c3e50;
+            color: #aaa;
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9rem;
+        }
+
+        /* =================================
+           MEDIA QUERIES - RESPONSIVE
+           ================================= */
+
+        /* TABLET (768px+) */
+        @media (min-width: 768px) {
+            .nav-links {
+                display: flex;    /* Mostrar menú */
+            }
+
+            .hero { padding: 60px 30px; }
+
+            .grid {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+
+            .tarjeta {
+                flex: 1 1 45%;
+            }
+        }
+
+        /* ESCRITORIO (1024px+) */
+        @media (min-width: 1024px) {
+            .hero { padding: 80px 40px; }
+
+            .tarjeta {
+                flex: 1 1 30%;
+            }
+
+            .contenido { padding: 40px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <div class="logo">📱 Responsive Demo</div>
+            <ul class="nav-links">
+                <li><a href="#">Inicio</a></li>
+                <li><a href="#">Servicios</a></li>
+                <li><a href="#">Portafolio</a></li>
+                <li><a href="#">Contacto</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1>Diseño Responsive</h1>
+        <p>Redimensiona la ventana del navegador para ver cómo se adapta esta página</p>
+    </section>
+
+    <main class="contenido">
+        <h2>Servicios</h2>
+        <div class="grid">
+            <div class="tarjeta">
+                <h3>📄 Diseño Web</h3>
+                <p>Creamos sitios web modernos que se ven perfectos en cualquier dispositivo, desde celulares hasta monitores grandes.</p>
+            </div>
+            <div class="tarjeta">
+                <h3>⚙️ Desarrollo Backend</h3>
+                <p>Programamos la lógica del servidor con PHP para que tus formularios y aplicaciones funcionen correctamente.</p>
+            </div>
+            <div class="tarjeta">
+                <h3>🎨 Diseño UI/UX</h3>
+                <p>Diseñamos interfaces intuitivas y atractivas que mejoran la experiencia de tus usuarios.</p>
+            </div>
+            <div class="tarjeta">
+                <h3>📱 Mobile First</h3>
+                <p>Aplicamos la estrategia Mobile First: diseñamos primero para celulares y luego escalamos a pantallas grandes.</p>
+            </div>
+            <div class="tarjeta">
+                <h3>🚀 Optimización</h3>
+                <p>Mejoramos el rendimiento de tu sitio para que cargue rápido y posicione bien en buscadores.</p>
+            </div>
+            <div class="tarjeta">
+                <h3>🔧 Mantenimiento</h3>
+                <p>Damos soporte y actualizaciones continuas para que tu sitio web siempre esté en óptimas condiciones.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 UPTP Programación · Ejemplo de Diseño Responsive</p>
+    </footer>
+
+</body>
+</html>

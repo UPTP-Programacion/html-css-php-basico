@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estructura y Texto - Ejemplo</title>
+</head>
+<body>
+
+    <!-- ESTRUCTURA SEMÁNTICA -->
+    <header>
+        <h1>Blog de Tecnología</h1>
+        <nav>
+            <a href="#articulo1">Artículo 1</a> |
+            <a href="#articulo2">Artículo 2</a> |
+            <a href="#contacto">Contacto</a>
+        </nav>
+    </header>
+
+    <main>
+        <!-- ARTÍCULO CON FORMATO DE TEXTO -->
+        <article id="articulo1">
+            <h2>¿Qué es el Desarrollo Web?</h2>
+            <p>El desarrollo web es el proceso de crear sitios y aplicaciones para <strong>Internet</strong>. Se divide en:</p>
+            
+            <ul>
+                <li><strong>Frontend:</strong> Lo que el usuario ve (<em>HTML, CSS, JavaScript</em>)</li>
+                <li><strong>Backend:</strong> La lógica del servidor (<em>PHP, Python, Node.js</em>)</li>
+                <li><strong>Base de datos:</strong> Almacenamiento de información (<em>MySQL, PostgreSQL</em>)</li>
+            </ul>
+
+            <blockquote>
+                "Primero resuelve el problema. Después escribe el código." — John Johnson
+            </blockquote>
+        </article>
+
+        <hr>
+
+        <!-- ARTÍCULO CON TABLA -->
+        <article id="articulo2">
+            <h2>Comparativa de Tecnologías</h2>
+            <p>Esta tabla muestra las tecnologías que aprenderemos en este curso:</p>
+
+            <table border="1" cellpadding="8" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Tecnología</th>
+                        <th>Tipo</th>
+                        <th>Uso Principal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>HTML5</td>
+                        <td>Marcado</td>
+                        <td>Estructura de la página</td>
+                    </tr>
+                    <tr>
+                        <td>CSS3</td>
+                        <td>Estilos</td>
+                        <td>Diseño visual y layout</td>
+                    </tr>
+                    <tr>
+                        <td>PHP</td>
+                        <td>Programación</td>
+                        <td>Lógica del servidor</td>
+                    </tr>
+                </tbody>
+            </table>
+        </article>
+
+        <hr>
+
+        <!-- SECCIÓN CON LISTA DE DEFINICIONES -->
+        <section>
+            <h2>Glosario</h2>
+            <dl>
+                <dt>Etiqueta</dt>
+                <dd>Elemento HTML que define la estructura del contenido.</dd>
+
+                <dt>Atributo</dt>
+                <dd>Información adicional dentro de una etiqueta HTML.</dd>
+
+                <dt>Semántica</dt>
+                <dd>Uso de etiquetas que describen el significado del contenido.</dd>
+            </dl>
+        </section>
+    </main>
+
+    <!-- PIE DE PÁGINA -->
+    <footer id="contacto">
+        <hr>
+        <p><small>&copy; 2025 UPTP Programación · Todos los derechos reservados</small></p>
+    </footer>
+
+</body>
+</html>

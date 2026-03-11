@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Registro - Ejemplo</title>
+</head>
+<body>
+
+    <header>
+        <h1>Registro de Estudiante</h1>
+        <p>Completa todos los campos para inscribirte.</p>
+    </header>
+
+    <main>
+        <form action="procesar.php" method="POST">
+
+            <!-- DATOS PERSONALES -->
+            <fieldset>
+                <legend>Datos Personales</legend>
+
+                <p>
+                    <label for="nombre">Nombre completo:</label><br>
+                    <input type="text" id="nombre" name="nombre" placeholder="Ej: María García" required>
+                </p>
+
+                <p>
+                    <label for="cedula">Cédula:</label><br>
+                    <input type="text" id="cedula" name="cedula" placeholder="V-12345678" required maxlength="10">
+                </p>
+
+                <p>
+                    <label for="fecha_nac">Fecha de nacimiento:</label><br>
+                    <input type="date" id="fecha_nac" name="fecha_nacimiento" required>
+                </p>
+
+                <p>
+                    <label for="email">Correo electrónico:</label><br>
+                    <input type="email" id="email" name="email" placeholder="correo@ejemplo.com" required>
+                </p>
+
+                <p>
+                    <label for="telefono">Teléfono:</label><br>
+                    <input type="tel" id="telefono" name="telefono" placeholder="0412-1234567">
+                </p>
+            </fieldset>
+
+            <!-- DATOS ACADÉMICOS -->
+            <fieldset>
+                <legend>Datos Académicos</legend>
+
+                <p>
+                    <label for="carrera">Carrera:</label><br>
+                    <select id="carrera" name="carrera" required>
+                        <option value="">-- Selecciona tu carrera --</option>
+                        <option value="informatica">Ingeniería en Informática</option>
+                        <option value="sistemas">Ingeniería de Sistemas</option>
+                        <option value="electronica">Ingeniería Electrónica</option>
+                        <option value="mecanica">Ingeniería Mecánica</option>
+                    </select>
+                </p>
+
+                <p>
+                    <label for="semestre">Semestre:</label><br>
+                    <input type="number" id="semestre" name="semestre" min="1" max="12" placeholder="1-12" required>
+                </p>
+
+                <p>Turno preferido:</p>
+                <input type="radio" id="manana" name="turno" value="manana" required>
+                <label for="manana">Mañana</label>
+                <input type="radio" id="tarde" name="turno" value="tarde">
+                <label for="tarde">Tarde</label>
+                <input type="radio" id="noche" name="turno" value="noche">
+                <label for="noche">Noche</label>
+
+                <p>Lenguajes que conoces:</p>
+                <input type="checkbox" id="html_check" name="lenguajes[]" value="html">
+                <label for="html_check">HTML</label><br>
+                <input type="checkbox" id="css_check" name="lenguajes[]" value="css">
+                <label for="css_check">CSS</label><br>
+                <input type="checkbox" id="js_check" name="lenguajes[]" value="javascript">
+                <label for="js_check">JavaScript</label><br>
+                <input type="checkbox" id="php_check" name="lenguajes[]" value="php">
+                <label for="php_check">PHP</label><br>
+                <input type="checkbox" id="java_check" name="lenguajes[]" value="java">
+                <label for="java_check">Java</label>
+            </fieldset>
+
+            <!-- INFORMACIÓN ADICIONAL -->
+            <fieldset>
+                <legend>Información Adicional</legend>
+
+                <p>
+                    <label for="motivacion">¿Por qué quieres estudiar programación?</label><br>
+                    <textarea id="motivacion" name="motivacion" rows="4" cols="50" placeholder="Cuéntanos tu motivación..."></textarea>
+                </p>
+
+                <p>
+                    <label for="color">Color favorito:</label>
+                    <input type="color" id="color" name="color_favorito" value="#1572B6">
+                </p>
+            </fieldset>
+
+            <br>
+
+            <!-- BOTONES -->
+            <button type="submit">✅ Enviar Registro</button>
+            <button type="reset">🔄 Limpiar Formulario</button>
+
+        </form>
+    </main>
+
+    <footer>
+        <hr>
+        <p><small>&copy; 2025 UPTP Programación</small></p>
+    </footer>
+
+</body>
+</html>
