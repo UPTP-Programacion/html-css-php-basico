@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Guía: Campos, Vistas Externas y Validaciones JS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0d0f14;
+      --surface: #13161e;
+      --border: #1f2333;
+      --accent: #5cffb1;
+      --accent2: #ff6b6b;
+      --accent3: #ffd166;
+      --text: #e8eaf0;
+      --muted: #6b7280;
+      --code-bg: #0a0c10;
+      --step-w: 780px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Sora', sans-serif;
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, #0d0f14 0%, #111827 60%, #0f1a14 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 72px 24px 60px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(92,255,177,.07), transparent);
+    }
+    .badge {
+      display: inline-block;
+      background: rgba(92,255,177,.1);
+      border: 1px solid rgba(92,255,177,.3);
+      color: var(--accent);
+      font-family: 'Space Mono', monospace;
+      font-size: .72rem;
+      letter-spacing: .12em;
+      padding: 4px 14px;
+      border-radius: 999px;
+      margin-bottom: 22px;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 700;
+      line-height: 1.15;
+      max-width: 700px;
+      margin: 0 auto 18px;
+    }
+    .hero h1 span { color: var(--accent); }
+    .hero p {
+      color: var(--muted);
+      max-width: 520px;
+      margin: 0 auto;
+      font-size: 1.05rem;
+    }
+    .tech-pills {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 32px;
+    }
+    .pill {
+      font-family: 'Space Mono', monospace;
+      font-size: .78rem;
+      padding: 5px 14px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .pill.html { border-color: #ff6b6b44; color: var(--accent2); }
+    .pill.css  { border-color: #ffd16644; color: var(--accent3); }
+    .pill.js   { border-color: #5cffb144; color: var(--accent);  }
+
+    /* ── MAIN LAYOUT ── */
+    main {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 56px 24px 100px;
+    }
+
+    /* ── SECTION TITLE ── */
+    .section-title {
+      font-family: 'Space Mono', monospace;
+      font-size: .7rem;
+      letter-spacing: .2em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    /* ── STEP CARD ── */
+    .step {
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      gap: 0 24px;
+      margin-bottom: 48px;
+      position: relative;
+    }
+    .step:not(:last-child)::before {
+      content: '';
+      position: absolute;
+      left: 27px;
+      top: 56px;
+      bottom: -48px;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--border), transparent);
+    }
+    .step-num {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Space Mono', monospace;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+    .step-body { padding-top: 12px; }
+    .step-body h2 {
+      font-size: 1.18rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .step-body p { color: var(--muted); margin-bottom: 14px; font-size: .97rem; }
+    .step-body ul {
+      list-style: none;
+      margin: 0 0 14px;
+      padding: 0;
+    }
+    .step-body ul li {
+      color: var(--muted);
+      font-size: .93rem;
+      padding-left: 18px;
+      position: relative;
+      margin-bottom: 5px;
+    }
+    .step-body ul li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: .75rem;
+    }
+    .step-body strong { color: var(--text); }
+
+    /* ── CODE BLOCK ── */
+    .code-block {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 16px 0;
+    }
+    .code-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 18px;
+      border-bottom: 1px solid var(--border);
+    }
+    .code-lang {
+      font-family: 'Space Mono', monospace;
+      font-size: .72rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .code-lang.html { color: var(--accent2); }
+    .code-lang.css  { color: var(--accent3); }
+    .code-lang.js   { color: var(--accent); }
+    .code-dots { display: flex; gap: 6px; }
+    .code-dots span {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+    pre {
+      padding: 20px 22px;
+      overflow-x: auto;
+      font-family: 'Space Mono', monospace;
+      font-size: .8rem;
+      line-height: 1.8;
+    }
+    code { display: block; white-space: pre; }
+
+    /* syntax highlight helpers */
+    .kw { color: #c792ea; }
+    .str { color: #c3e88d; }
+    .attr { color: #ffcb6b; }
+    .tag { color: #89ddff; }
+    .cm  { color: #546e7a; font-style: italic; }
+    .val { color: #f78c6c; }
+    .fn  { color: var(--accent); }
+
+    /* ── NOTE BOX ── */
+    .note {
+      background: rgba(92,255,177,.05);
+      border: 1px solid rgba(92,255,177,.2);
+      border-radius: 10px;
+      padding: 14px 18px;
+      font-size: .9rem;
+      color: #a7f3d0;
+      margin: 14px 0;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .note .icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+
+    .note.warn {
+      background: rgba(255,209,102,.05);
+      border-color: rgba(255,209,102,.2);
+      color: #fde68a;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 52px 0;
+    }
+
+    /* ── DEMO SECTION ── */
+    .demo-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      margin-top: 56px;
+    }
+    .demo-header {
+      padding: 20px 28px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .demo-header h2 { font-size: 1.05rem; font-weight: 600; }
+    .demo-badge {
+      background: rgba(92,255,177,.12);
+      border: 1px solid rgba(92,255,177,.25);
+      color: var(--accent);
+      font-family: 'Space Mono', monospace;
+      font-size: .65rem;
+      letter-spacing: .1em;
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+    .demo-frame {
+      padding: 0;
+    }
+    iframe {
+      width: 100%;
+      height: 700px;
+      border: none;
+      display: block;
+      background: #fff;
+    }
+
+    /* ── RESULT VISUAL ── */
+    .result-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 20px 0;
+    }
+    @media (max-width: 600px) { .result-grid { grid-template-columns: 1fr; } }
+    .result-card {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      font-size: .88rem;
+    }
+    .result-card h4 {
+      font-family: 'Space Mono', monospace;
+      font-size: .72rem;
+      color: var(--accent);
+      letter-spacing: .08em;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+    .result-card p { color: var(--muted); line-height: 1.6; }
+
+    /* ── PROP TABLE ── */
+    .prop-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: .88rem;
+    }
+    .prop-table th {
+      text-align: left;
+      font-family: 'Space Mono', monospace;
+      font-size: .72rem;
+      color: var(--accent);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .prop-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+      color: var(--muted);
+    }
+    .prop-table td:first-child {
+      font-family: 'Space Mono', monospace;
+      color: var(--accent3);
+      font-size: .82rem;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════ HERO ═══════════ -->
+<header class="hero">
+  <div class="badge">GUÍA PASO A PASO</div>
+  <h1>Campos de Formulario, <span>Vistas Externas</span> y Validaciones JS</h1>
+  <p>Aprende a separar tu código en archivos, dominar los tipos de campos HTML y validar formularios con JavaScript puro.</p>
+  <div class="tech-pills">
+    <span class="pill html">HTML5</span>
+    <span class="pill css">CSS3</span>
+    <span class="pill js">JavaScript ES6</span>
+  </div>
+</header>
+
+<!-- ═══════════ MAIN CONTENT ═══════════ -->
+<main>
+
+  <p class="section-title">Temas de esta guía</p>
+  <p style="color:var(--muted);margin-bottom:36px;font-size:.95rem;">
+    Cubriremos 3 pilares fundamentales: <strong style="color:var(--text)">organizar archivos externos</strong>, conocer los <strong style="color:var(--text)">tipos de campos</strong> y sus propiedades, y <strong style="color:var(--text)">validar con JavaScript</strong>.
+  </p>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!--              PASO 1: VISTAS EXTERNAS       -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="step">
+    <div class="step-num">01</div>
+    <div class="step-body">
+      <h2>Agregar vistas desde otro archivo HTML</h2>
+      <p>Vamos a crear un archivo <strong>formularioRegistro.html</strong> con un formulario completo, y luego lo mostraremos dentro de nuestro <strong>index.html</strong> como una nueva pestaña del menú. Esto permite dividir el contenido en archivos separados y cargarlo dinámicamente.</p>
+
+      <p>El proceso tiene <strong>4 partes</strong>:</p>
+      <ul>
+        <li><strong>Parte A:</strong> Crear el archivo <strong>formularioRegistro.html</strong> con su propio contenido.</li>
+        <li><strong>Parte B:</strong> Agregar un nuevo botón en el menú de <strong>index.html</strong>.</li>
+        <li><strong>Parte C:</strong> Agregar una nueva sección con un <strong>&lt;iframe&gt;</strong> que cargue el archivo.</li>
+        <li><strong>Parte D:</strong> El JavaScript existente ya maneja la navegación automáticamente.</li>
+      </ul>
+
+      <!-- ── PARTE A ── -->
+      <h3 style="color:var(--accent);font-size:.95rem;margin:24px 0 8px;">Parte A — Crear el archivo formularioRegistro.html</h3>
+      <p>Creamos un nuevo archivo HTML independiente en la misma carpeta del proyecto. Este archivo tiene su propio <strong>&lt;html&gt;</strong>, <strong>&lt;head&gt;</strong> y <strong>&lt;body&gt;</strong> completo.</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-lang" style="color:var(--muted)">ESTRUCTURA DE CARPETAS</span>
+        </div>
+        <pre><code><span class="fn">mi-proyecto/</span>
+├── <span class="attr">index.html</span>                <span class="cm">← página principal con el menú</span>
+├── <span class="attr">formularioRegistro.html</span>   <span class="cm">← NUEVO: formulario en archivo separado</span>
+├── <span class="fn">style/</span>
+│   └── <span class="attr">style.css</span>             <span class="cm">← estilos CSS</span>
+└── <span class="attr">app.js</span>                    <span class="cm">← lógica de las tabs</span></code></pre>
+      </div>
+
+      <div class="note">
+        <span class="icon">💡</span>
+        <span>El archivo <strong>formularioRegistro.html</strong> es una página HTML completa e independiente. Puede abrirse solo en el navegador o cargarse dentro de otro HTML usando un <strong>&lt;iframe&gt;</strong>.</span>
+      </div>
+
+      <!-- ── PARTE B ── -->
+      <h3 style="color:var(--accent);font-size:.95rem;margin:24px 0 8px;">Parte B — Agregar el nuevo botón en el menú</h3>
+      <p>En el archivo <strong>index.html</strong>, agregamos un tercer botón dentro del <strong>&lt;nav&gt;</strong>. El atributo <strong>data-tab</strong> debe tener un nombre único que usaremos como <strong>id</strong> de la sección.</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-lang html">HTML — index.html (menú)</span>
+        </div>
+        <pre><code><span class="cm">&lt;!-- ① MENÚ DE NAVEGACIÓN --&gt;</span>
+<span class="tag">&lt;nav</span> <span class="attr">class</span>=<span class="str">"menu"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;button</span> <span class="attr">class</span>=<span class="str">"tab-btn active"</span>
+          <span class="attr">data-tab</span>=<span class="str">"registro"</span><span class="tag">&gt;</span>
+    Registro
+  <span class="tag">&lt;/button&gt;</span>
+  <span class="tag">&lt;button</span> <span class="attr">class</span>=<span class="str">"tab-btn"</span>
+          <span class="attr">data-tab</span>=<span class="str">"contacto"</span><span class="tag">&gt;</span>
+    Contacto
+  <span class="tag">&lt;/button&gt;</span>
+
+  <span class="cm">&lt;!-- ★ NUEVO BOTÓN --&gt;</span>
+  <span class="tag">&lt;button</span> <span class="attr">class</span>=<span class="str">"tab-btn"</span>
+          <span class="attr">data-tab</span>=<span class="str">"formularioRegistro"</span><span class="tag">&gt;</span>
+    Formulario de Registro
+  <span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;/nav&gt;</span></code></pre>
+      </div>
+
+      <div class="note warn">
+        <span class="icon">⚠️</span>
+        <span>El valor de <strong>data-tab="formularioRegistro"</strong> debe coincidir exactamente con el <strong>id</strong> de la sección que crearemos en el siguiente paso. Si no coinciden, JavaScript no podrá encontrar qué mostrar.</span>
+      </div>
+
+      <!-- ── PARTE C ── -->
+      <h3 style="color:var(--accent);font-size:.95rem;margin:24px 0 8px;">Parte C — Agregar la sección con &lt;iframe&gt;</h3>
+      <p>Debajo de las secciones existentes (<strong>#registro</strong> y <strong>#contacto</strong>), agregamos una nueva <strong>&lt;section&gt;</strong> con un <strong>&lt;iframe&gt;</strong> que carga el archivo externo.</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-lang html">HTML — index.html (nueva sección)</span>
+        </div>
+        <pre><code><span class="cm">&lt;!-- ④ FORMULARIO EXTERNO: cargado desde otro archivo --&gt;</span>
+<span class="tag">&lt;section</span> <span class="attr">id</span>=<span class="str">"formularioRegistro"</span> <span class="attr">class</span>=<span class="str">"form-panel"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;h2&gt;</span>Formulario de Registro<span class="tag">&lt;/h2&gt;</span>
+  <span class="tag">&lt;iframe</span>
+    <span class="attr">src</span>=<span class="str">"formularioRegistro.html"</span>
+    <span class="attr">width</span>=<span class="str">"100%"</span>
+    <span class="attr">height</span>=<span class="str">"600"</span>
+    <span class="attr">style</span>=<span class="str">"border: none; border-radius: 8px;"</span>
+  <span class="tag">&gt;&lt;/iframe&gt;</span>
+<span class="tag">&lt;/section&gt;</span></code></pre>
+      </div>
+
+      <div class="result-grid">
+        <div class="result-card">
+          <h4>&lt;iframe&gt; — ¿Qué es?</h4>
+          <p>Es una etiqueta HTML que <strong style="color:var(--accent)">incrusta otra página web</strong> dentro de la página actual. Funciona como una "ventana" que muestra el contenido de otro archivo HTML.</p>
+        </div>
+        <div class="result-card">
+          <h4>src — La conexión</h4>
+          <p>El atributo <strong style="color:var(--accent3)">src="formularioRegistro.html"</strong> es la ruta al archivo. Como ambos archivos están en la misma carpeta, solo usamos el nombre.</p>
+        </div>
+      </div>
+
+      <table class="prop-table">
+        <tr><th>Propiedad del iframe</th><th>Descripción</th></tr>
+        <tr><td>src</td><td>Ruta al archivo HTML que se va a cargar (la conexión entre archivos)</td></tr>
+        <tr><td>width</td><td>Ancho del iframe (usamos "100%" para que ocupe todo el espacio)</td></tr>
+        <tr><td>height</td><td>Alto en píxeles del iframe</td></tr>
+        <tr><td>style="border: none"</td><td>Quitamos el borde por defecto para que se vea integrado</td></tr>
+      </table>
+
+      <!-- ── PARTE D ── -->
+      <h3 style="color:var(--accent);font-size:.95rem;margin:24px 0 8px;">Parte D — El JavaScript ya funciona</h3>
+      <p>El código de <strong>app.js</strong> que ya tenemos no necesita ningún cambio. Recordemos cómo funciona:</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-lang js">JavaScript — app.js (sin cambios)</span>
+        </div>
+        <pre><code><span class="cm">// Selecciona TODOS los botones y TODOS los paneles</span>
+<span class="kw">const</span> tabButtons = document.<span class="fn">querySelectorAll</span>(<span class="str">'.tab-btn'</span>);
+<span class="kw">const</span> formPanels = document.<span class="fn">querySelectorAll</span>(<span class="str">'.form-panel'</span>);
+
+tabButtons.<span class="fn">forEach</span>(<span class="kw">function</span>(btn) {
+  btn.<span class="fn">addEventListener</span>(<span class="str">'click'</span>, <span class="kw">function</span>() {
+    <span class="kw">const</span> target = btn.<span class="fn">getAttribute</span>(<span class="str">'data-tab'</span>);
+
+    <span class="cm">// Quita .active de todos</span>
+    tabButtons.<span class="fn">forEach</span>(<span class="kw">function</span>(b) { b.classList.<span class="fn">remove</span>(<span class="str">'active'</span>); });
+    formPanels.<span class="fn">forEach</span>(<span class="kw">function</span>(p) { p.classList.<span class="fn">remove</span>(<span class="str">'active'</span>); });
+
+    <span class="cm">// Activa solo el seleccionado</span>
+    btn.classList.<span class="fn">add</span>(<span class="str">'active'</span>);
+    document.<span class="fn">getElementById</span>(target).classList.<span class="fn">add</span>(<span class="str">'active'</span>);
+  });
+});</code></pre>
+      </div>
+
+      <p>¿Por qué funciona sin cambios? Porque el patrón <strong>limpiar todo → activar lo seleccionado</strong> es genérico:</p>
+      <ul>
+        <li><strong>querySelectorAll('.tab-btn')</strong> selecciona automáticamente los 3 botones (incluyendo el nuevo).</li>
+        <li><strong>querySelectorAll('.form-panel')</strong> selecciona las 3 secciones (incluyendo la nueva).</li>
+        <li><strong>getElementById(target)</strong> busca el id que coincide con el <strong>data-tab</strong> del botón clickeado.</li>
+      </ul>
+
+      <div class="note">
+        <span class="icon">🔑</span>
+        <span><strong>Resumen de la conexión:</strong> El botón tiene <code>data-tab="formularioRegistro"</code> → JavaScript lee ese valor → busca <code>getElementById("formularioRegistro")</code> → encuentra la sección → le agrega la clase <code>.active</code> → el CSS muestra esa sección → el <code>&lt;iframe&gt;</code> dentro carga el archivo <code>formularioRegistro.html</code>.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!--       PASO 2: TIPOS DE CAMPOS              -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="step">
+    <div class="step-num">02</div>
+    <div class="step-body">
+      <h2>Tipos de campos de formulario</h2>
+      <p>HTML ofrece distintos tipos de <strong>&lt;input&gt;</strong> y otros elementos para capturar datos del usuario. Cada tipo tiene propiedades específicas que controlan su comportamiento.</p>
+
+      <!-- ── INPUT TEXT ── -->
+      <h3 style="color:var(--accent2);font-size:.95rem;margin:20px 0 8px;">&#9654; input type="text"</h3>
+      <p>Campo de texto libre. Es el tipo más básico y común.</p>
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-lang html">HTML</span>
+        </div>
+        <pre><code><span class="tag">&lt;label&gt;</span>Nombre completo<span class="tag">&lt;/label&gt;</span>
+<span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="str">"text"</span>
+       <span class="attr">placeholder</span>=<span class="str">"Ej: Juan Pérez"</span>
+       <span class="attr">maxlength</span>=<span class="str">"50"</span>
+       <span class="attr">required</span>
+       <span class="attr">value</span>=<span class="str">""</span>
+       <span class="attr">disabled</span>
+       <span class="attr">readonly</span><span class="tag">/&gt;</span></code></pre>
+      </div>
+      <table class="prop-table">
+        <tr><th>Propiedad</th><th>Descripción</th></tr>
+        <tr><td>placeholder</td><td>Texto gris que aparece cuando el campo está vacío (pista visual)</td></tr>
+        <tr><td>maxlength</td><td>Número máximo de caracteres permitidos</td></tr>
+        <tr><td>required</td><td>El campo es obligatorio — el formulario no se envía si está vacío</td></tr>
+        <tr><td>value</td><td>Valor inicial del campo</td></tr>
+        <tr><td>disabled</td><td>El campo aparece gris y NO se puede editar ni enviar</td></tr>
+        <tr><td>readonly</td><td>El campo se puede leer pero NO editar (sí se envía)</td></tr>
+      </table>
+
+      <!-- ── INPUT NUMBER ── -->
+      <h3 style="color:var(--accent2);font-size:.95rem;margin:20px 0 8px;">&#9654; input type="number"</h3>
+      <p>Solo acepta valores numéricos. Muestra flechas para incrementar/decrementar.</p>
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-lang html">HTML</span>
+        </div>
+        <pre><code><span class="tag">&lt;label&gt;</span>Edad<span class="tag">&lt;/label&gt;</span>
+<span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="str">"number"</span>
+       <span class="attr">placeholder</span>=<span class="str">"Ej: 25"</span>
+       <span class="attr">min</span>=<span class="str">"1"</span>
+       <span class="attr">max</span>=<span class="str">"120"</span>
+       <span class="attr">step</span>=<span class="str">"1"</span><span class="tag">/&gt;</span></code></pre>
+      </div>
+      <table class="prop-table">
+        <tr><th>Propiedad</th><th>Descripción</th></tr>
+        <tr><td>min</td><td>Valor mínimo permitido</td></tr>
+        <tr><td>max</td><td>Valor máximo permitido</td></tr>
+        <tr><td>step</td><td>Incremento de cada paso (ej: <code>0.01</code> para decimales, <code>1</code> para enteros)</td></tr>
+      </table>
+
+      <!-- ── INPUT DATE ── -->
+      <h3 style="color:var(--accent2);font-size:.95rem;margin:20px 0 8px;">&#9654; input type="date"</h3>
+      <p>Muestra un selector de fecha nativo del navegador.</p>
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-lang html">HTML</span>
+        </div>
+        <pre><code><span class="tag">&lt;label&gt;</span>Fecha de nacimiento<span class="tag">&lt;/label&gt;</span>
+<span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="str">"date"</span>
+       <span class="attr">min</span>=<span class="str">"1950-01-01"</span>
+       <span class="attr">max</span>=<span class="str">"2010-12-31"</span>
+       <span class="attr">value</span>=<span class="str">"2000-01-15"</span><span class="tag">/&gt;</span></code></pre>
+      </div>
+      <table class="prop-table">
+        <tr><th>Propiedad</th><th>Descripción</th></tr>
+        <tr><td>min</td><td>Fecha mínima seleccionable (formato <code>AAAA-MM-DD</code>)</td></tr>
+        <tr><td>max</td><td>Fecha máxima seleccionable</td></tr>
+        <tr><td>value</td><td>Fecha seleccionada por defecto</td></tr>
+      </table>
+
+      <!-- ── INPUT EMAIL ── -->
+      <h3 style="color:var(--accent2);font-size:.95rem;margin:20px 0 8px;">&#9654; input type="email"</h3>
+      <p>Valida automáticamente que el texto tenga formato de correo electrónico.</p>
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-lang html">HTML</span>
+        </div>
+        <pre><code><span class="tag">&lt;label&gt;</span>Correo electrónico<span class="tag">&lt;/label&gt;</span>
+<span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="str">"email"</span>
+       <span class="attr">placeholder</span>=<span class="str">"tu@email.com"</span>
+       <span class="attr">required</span><span class="tag">/&gt;</span></code></pre>
+      </div>
+      <div class="note">
+        <span class="icon">💡</span>
+        <span>El navegador valida automáticamente que el texto contenga <strong>@</strong> y un dominio. Si no cumple el formato, el formulario no se envía.</span>
+      </div>
+
+      <!-- ── INPUT PASSWORD ── -->
+      <h3 style="color:var(--accent2);font-size:.95rem;margin:20px 0 8px;">&#9654; input type="password"</h3>
+      <p>Oculta los caracteres escritos con puntos o asteriscos.</p>
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-lang html">HTML</span>
+        </div>
+        <pre><code><span class="tag">&lt;label&gt;</span>Contraseña<span class="tag">&lt;/label&gt;</span>
+<span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="str">"password"</span>
+       <span class="attr">placeholder</span>=<span class="str">"Mínimo 6 caracteres"</span>
+       <span class="attr">minlength</span>=<span class="str">"6"</span>
+       <span class="attr">maxlength</span>=<span class="str">"20"</span>
+       <span class="attr">required</span><span class="tag">/&gt;</span></code></pre>
+      </div>
+      <table class="prop-table">
+        <tr><th>Propiedad</th><th>Descripción</th></tr>
+        <tr><td>minlength</td><td>Cantidad mínima de caracteres requeridos</td></tr>
+        <tr><td>maxlength</td><td>Cantidad máxima de caracteres permitidos</td></tr>
+      </table>
+
+      <!-- ── TEXTAREA ── -->
+      <h3 style="color:var(--accent2);font-size:.95rem;margin:20px 0 8px;">&#9654; textarea</h3>
+      <p>Campo de texto multilínea, ideal para mensajes largos o comentarios.</p>
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-lang html">HTML</span>
+        </div>
+        <pre><code><span class="tag">&lt;label&gt;</span>Mensaje<span class="tag">&lt;/label&gt;</span>
+<span class="tag">&lt;textarea</span> <span class="attr">rows</span>=<span class="str">"4"</span>
+          <span class="attr">cols</span>=<span class="str">"50"</span>
+          <span class="attr">placeholder</span>=<span class="str">"Escribe tu mensaje..."</span>
+          <span class="attr">maxlength</span>=<span class="str">"500"</span><span class="tag">&gt;&lt;/textarea&gt;</span></code></pre>
+      </div>
+      <table class="prop-table">
+        <tr><th>Propiedad</th><th>Descripción</th></tr>
+        <tr><td>rows</td><td>Número de líneas visibles (alto del campo)</td></tr>
+        <tr><td>cols</td><td>Número de caracteres de ancho visible</td></tr>
+        <tr><td>placeholder</td><td>Texto de ayuda cuando está vacío</td></tr>
+        <tr><td>maxlength</td><td>Límite máximo de caracteres</td></tr>
+      </table>
+
+      <!-- ── SELECT ── -->
+      <h3 style="color:var(--accent2);font-size:.95rem;margin:20px 0 8px;">&#9654; select</h3>
+      <p>Lista desplegable para elegir una opción entre varias.</p>
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-lang html">HTML</span>
+        </div>
+        <pre><code><span class="tag">&lt;label&gt;</span>Género<span class="tag">&lt;/label&gt;</span>
+<span class="tag">&lt;select</span> <span class="attr">required</span><span class="tag">&gt;</span>
+  <span class="cm">&lt;!-- Opción vacía como placeholder --&gt;</span>
+  <span class="tag">&lt;option</span> <span class="attr">value</span>=<span class="str">""</span> <span class="attr">disabled</span> <span class="attr">selected</span><span class="tag">&gt;</span>Selecciona...<span class="tag">&lt;/option&gt;</span>
+  <span class="tag">&lt;option</span> <span class="attr">value</span>=<span class="str">"F"</span><span class="tag">&gt;</span>Femenino<span class="tag">&lt;/option&gt;</span>
+  <span class="tag">&lt;option</span> <span class="attr">value</span>=<span class="str">"M"</span><span class="tag">&gt;</span>Masculino<span class="tag">&lt;/option&gt;</span>
+  <span class="tag">&lt;option</span> <span class="attr">value</span>=<span class="str">"O"</span><span class="tag">&gt;</span>Otro<span class="tag">&lt;/option&gt;</span>
+<span class="tag">&lt;/select&gt;</span></code></pre>
+      </div>
+      <table class="prop-table">
+        <tr><th>Propiedad</th><th>Descripción</th></tr>
+        <tr><td>value</td><td>El valor que se envía al servidor cuando se elige esa opción</td></tr>
+        <tr><td>selected</td><td>Marca la opción seleccionada por defecto</td></tr>
+        <tr><td>disabled</td><td>La opción aparece pero no se puede elegir (útil para placeholders)</td></tr>
+      </table>
+
+      <div class="note">
+        <span class="icon">🔑</span>
+        <span>La primera <strong>&lt;option&gt;</strong> con <code>value=""</code>, <code>disabled</code> y <code>selected</code> funciona como un placeholder: el usuario ve "Selecciona..." pero debe elegir una opción real.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!--        PASO 3: VALIDACIONES CON JS          -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="step">
+    <div class="step-num">03</div>
+    <div class="step-body">
+      <h2>Validaciones con JavaScript</h2>
+      <p>Aunque HTML tiene validaciones nativas (<code>required</code>, <code>minlength</code>, etc.), JavaScript permite crear validaciones personalizadas con mensajes de error claros.</p>
+
+      <ul>
+        <li>Capturamos el formulario con <strong>getElementById</strong>.</li>
+        <li>Escuchamos el evento <strong>submit</strong>.</li>
+        <li>Usamos <strong>preventDefault()</strong> para evitar que la página se recargue.</li>
+        <li>Validamos cada campo y mostramos errores en el DOM.</li>
+      </ul>
+
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-lang js">JavaScript — validacion.js</span>
+        </div>
+        <pre><code><span class="cm">// ① Seleccionamos el formulario</span>
+<span class="kw">const</span> form = document.<span class="fn">getElementById</span>(<span class="str">'miFormulario'</span>);
+
+<span class="cm">// ② Escuchamos el evento "submit"</span>
+form.<span class="fn">addEventListener</span>(<span class="str">'submit'</span>, <span class="kw">function</span>(event) {
+
+  <span class="cm">// ③ Evitamos que la página se recargue</span>
+  event.<span class="fn">preventDefault</span>();
+
+  <span class="cm">// ④ Obtenemos los valores de los campos</span>
+  <span class="kw">var</span> nombre = document.<span class="fn">getElementById</span>(<span class="str">'nombre'</span>).value;
+  <span class="kw">var</span> email  = document.<span class="fn">getElementById</span>(<span class="str">'email'</span>).value;
+  <span class="kw">var</span> edad   = document.<span class="fn">getElementById</span>(<span class="str">'edad'</span>).value;
+
+  <span class="cm">// ⑤ Limpiamos errores anteriores</span>
+  document.<span class="fn">getElementById</span>(<span class="str">'errores'</span>).innerHTML = <span class="str">''</span>;
+
+  <span class="kw">var</span> mensajes = [];
+
+  <span class="cm">// ⑥ Validar nombre (no vacío, mínimo 3 caracteres)</span>
+  <span class="kw">if</span> (nombre === <span class="str">''</span>) {
+    mensajes.<span class="fn">push</span>(<span class="str">'El nombre es obligatorio'</span>);
+  } <span class="kw">else if</span> (nombre.length &lt; <span class="val">3</span>) {
+    mensajes.<span class="fn">push</span>(<span class="str">'El nombre debe tener al menos 3 caracteres'</span>);
+  }
+
+  <span class="cm">// ⑦ Validar email (contiene @)</span>
+  <span class="kw">if</span> (email === <span class="str">''</span>) {
+    mensajes.<span class="fn">push</span>(<span class="str">'El email es obligatorio'</span>);
+  } <span class="kw">else if</span> (email.<span class="fn">indexOf</span>(<span class="str">'@'</span>) === <span class="val">-1</span>) {
+    mensajes.<span class="fn">push</span>(<span class="str">'El email debe contener @'</span>);
+  }
+
+  <span class="cm">// ⑧ Validar edad (entre 1 y 120)</span>
+  <span class="kw">if</span> (edad === <span class="str">''</span>) {
+    mensajes.<span class="fn">push</span>(<span class="str">'La edad es obligatoria'</span>);
+  } <span class="kw">else if</span> (edad &lt; <span class="val">1</span> || edad &gt; <span class="val">120</span>) {
+    mensajes.<span class="fn">push</span>(<span class="str">'La edad debe estar entre 1 y 120'</span>);
+  }
+
+  <span class="cm">// ⑨ Si hay errores, los mostramos</span>
+  <span class="kw">if</span> (mensajes.length &gt; <span class="val">0</span>) {
+    <span class="kw">var</span> listaHTML = <span class="str">''</span>;
+    <span class="kw">for</span> (<span class="kw">var</span> i = <span class="val">0</span>; i &lt; mensajes.length; i++) {
+      listaHTML += <span class="str">'&lt;p&gt;'</span> + mensajes[i] + <span class="str">'&lt;/p&gt;'</span>;
+    }
+    document.<span class="fn">getElementById</span>(<span class="str">'errores'</span>).innerHTML = listaHTML;
+  } <span class="kw">else</span> {
+    <span class="cm">// ⑩ Todo válido: mostramos éxito</span>
+    <span class="fn">alert</span>(<span class="str">'Formulario enviado correctamente'</span>);
+  }
+
+});</code></pre>
+      </div>
+
+      <p>El HTML del formulario necesita <strong>id</strong> en cada campo y un contenedor para los errores:</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-lang html">HTML</span>
+        </div>
+        <pre><code><span class="tag">&lt;form</span> <span class="attr">id</span>=<span class="str">"miFormulario"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;label&gt;</span>Nombre<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="str">"text"</span> <span class="attr">id</span>=<span class="str">"nombre"</span> <span class="attr">placeholder</span>=<span class="str">"Tu nombre"</span><span class="tag">/&gt;</span>
+
+  <span class="tag">&lt;label&gt;</span>Email<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="str">"email"</span> <span class="attr">id</span>=<span class="str">"email"</span> <span class="attr">placeholder</span>=<span class="str">"tu@email.com"</span><span class="tag">/&gt;</span>
+
+  <span class="tag">&lt;label&gt;</span>Edad<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="str">"number"</span> <span class="attr">id</span>=<span class="str">"edad"</span> <span class="attr">placeholder</span>=<span class="str">"Tu edad"</span><span class="tag">/&gt;</span>
+
+  <span class="cm">&lt;!-- Contenedor para errores --&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">id</span>=<span class="str">"errores"</span> <span class="attr">style</span>=<span class="str">"color: red;"</span><span class="tag">&gt;&lt;/div&gt;</span>
+
+  <span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="str">"submit"</span><span class="tag">&gt;</span>Enviar<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;/form&gt;</span></code></pre>
+      </div>
+
+      <div class="note">
+        <span class="icon">🔑</span>
+        <span><strong>event.preventDefault()</strong> es esencial. Sin él, el navegador recarga la página al enviar el formulario y nunca verás tus validaciones.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!--        PASO 4: ACCIONES EN BOTONES          -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="step">
+    <div class="step-num">04</div>
+    <div class="step-body">
+      <h2>Acciones en botones</h2>
+      <p>HTML tiene 3 tipos de botones dentro de un formulario. Cada uno tiene un comportamiento diferente.</p>
+
+      <div class="result-grid">
+        <div class="result-card">
+          <h4>type="submit"</h4>
+          <p><strong style="color:var(--accent)">Envía</strong> el formulario. Dispara el evento <code>submit</code> y las validaciones.</p>
+        </div>
+        <div class="result-card">
+          <h4>type="reset"</h4>
+          <p><strong style="color:var(--accent3)">Limpia</strong> todos los campos del formulario a sus valores iniciales.</p>
+        </div>
+      </div>
+      <div class="result-grid">
+        <div class="result-card">
+          <h4>type="button"</h4>
+          <p><strong style="color:var(--accent2)">No hace nada</strong> por defecto. Perfecto para acciones personalizadas con JavaScript.</p>
+        </div>
+        <div class="result-card">
+          <h4>Sin type</h4>
+          <p>Por defecto actúa como <strong style="color:var(--accent)">submit</strong> si está dentro de un <code>&lt;form&gt;</code>.</p>
+        </div>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-lang html">HTML</span>
+        </div>
+        <pre><code><span class="cm">&lt;!-- Envía el formulario --&gt;</span>
+<span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="str">"submit"</span><span class="tag">&gt;</span>Enviar<span class="tag">&lt;/button&gt;</span>
+
+<span class="cm">&lt;!-- Limpia todos los campos --&gt;</span>
+<span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="str">"reset"</span><span class="tag">&gt;</span>Limpiar formulario<span class="tag">&lt;/button&gt;</span>
+
+<span class="cm">&lt;!-- Acción personalizada con JS --&gt;</span>
+<span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="str">"button"</span> <span class="attr">id</span>=<span class="str">"btnVer"</span><span class="tag">&gt;</span>Ver/Ocultar contraseña<span class="tag">&lt;/button&gt;</span></code></pre>
+      </div>
+
+      <p>Ejemplo: un botón que muestra u oculta la contraseña:</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-lang js">JavaScript</span>
+        </div>
+        <pre><code><span class="cm">// Botón para mostrar/ocultar contraseña</span>
+<span class="kw">var</span> btnVer = document.<span class="fn">getElementById</span>(<span class="str">'btnVer'</span>);
+<span class="kw">var</span> passField = document.<span class="fn">getElementById</span>(<span class="str">'password'</span>);
+
+btnVer.<span class="fn">addEventListener</span>(<span class="str">'click'</span>, <span class="kw">function</span>() {
+  <span class="cm">// Si el tipo actual es "password", lo cambiamos a "text"</span>
+  <span class="kw">if</span> (passField.type === <span class="str">'password'</span>) {
+    passField.type = <span class="str">'text'</span>;
+    btnVer.textContent = <span class="str">'Ocultar contraseña'</span>;
+  } <span class="kw">else</span> {
+    passField.type = <span class="str">'password'</span>;
+    btnVer.textContent = <span class="str">'Ver contraseña'</span>;
+  }
+});</code></pre>
+      </div>
+
+      <div class="note warn">
+        <span class="icon">⚠️</span>
+        <span>Usa <strong>type="button"</strong> cuando quieras que un botón haga algo con JavaScript sin enviar ni limpiar el formulario. Si olvidas el type dentro de un <code>&lt;form&gt;</code>, el botón actuará como <strong>submit</strong>.</span>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!--     PASO 5: CÓDIGO COMPLETO                 -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="step">
+    <div class="step-num">05</div>
+    <div class="step-body">
+      <h2>Código completo: formularioRegistro.html</h2>
+      <p>Este es el archivo completo que debe crearse. Contiene el <strong>HTML</strong> con todos los tipos de campos, los <strong>estilos CSS</strong> y el <strong>JavaScript</strong> con las validaciones. Todo en un solo archivo independiente.</p>
+
+      <!-- ── HTML COMPLETO ── -->
+      <h3 style="color:var(--accent2);font-size:.95rem;margin:20px 0 8px;">&#9654; Parte HTML — Estructura del formulario</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-lang html">HTML — formularioRegistro.html</span>
+        </div>
+        <pre><code><span class="tag">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html</span> <span class="attr">lang</span>=<span class="str">"es"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;head&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="attr">charset</span>=<span class="str">"UTF-8"</span><span class="tag">/&gt;</span>
+  <span class="tag">&lt;title&gt;</span>Formulario de Registro<span class="tag">&lt;/title&gt;</span>
+  <span class="cm">&lt;!-- Los estilos van aquí (ver sección CSS abajo) --&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+<span class="tag">&lt;body&gt;</span>
+
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"container"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;h2&gt;</span>Formulario de Registro<span class="tag">&lt;/h2&gt;</span>
+  <span class="tag">&lt;form</span> <span class="attr">id</span>=<span class="str">"miFormulario"</span><span class="tag">&gt;</span>
+
+    <span class="cm">&lt;!-- Campo de texto --&gt;</span>
+    <span class="tag">&lt;label&gt;</span>Nombre completo<span class="tag">&lt;/label&gt;</span>
+    <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="str">"text"</span> <span class="attr">id</span>=<span class="str">"nombre"</span>
+           <span class="attr">placeholder</span>=<span class="str">"Ej: Juan Pérez"</span>
+           <span class="attr">maxlength</span>=<span class="str">"50"</span><span class="tag">/&gt;</span>
+
+    <span class="cm">&lt;!-- Campo de email --&gt;</span>
+    <span class="tag">&lt;label&gt;</span>Correo electrónico<span class="tag">&lt;/label&gt;</span>
+    <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="str">"email"</span> <span class="attr">id</span>=<span class="str">"email"</span>
+           <span class="attr">placeholder</span>=<span class="str">"tu@email.com"</span><span class="tag">/&gt;</span>
+
+    <span class="cm">&lt;!-- Campo numérico --&gt;</span>
+    <span class="tag">&lt;label&gt;</span>Edad<span class="tag">&lt;/label&gt;</span>
+    <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="str">"number"</span> <span class="attr">id</span>=<span class="str">"edad"</span>
+           <span class="attr">placeholder</span>=<span class="str">"Ej: 25"</span>
+           <span class="attr">min</span>=<span class="str">"1"</span> <span class="attr">max</span>=<span class="str">"120"</span> <span class="attr">step</span>=<span class="str">"1"</span><span class="tag">/&gt;</span>
+
+    <span class="cm">&lt;!-- Campo de fecha --&gt;</span>
+    <span class="tag">&lt;label&gt;</span>Fecha de nacimiento<span class="tag">&lt;/label&gt;</span>
+    <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="str">"date"</span> <span class="attr">id</span>=<span class="str">"fecha"</span>
+           <span class="attr">min</span>=<span class="str">"1950-01-01"</span>
+           <span class="attr">max</span>=<span class="str">"2010-12-31"</span><span class="tag">/&gt;</span>
+
+    <span class="cm">&lt;!-- Select (lista desplegable) --&gt;</span>
+    <span class="tag">&lt;label&gt;</span>Género<span class="tag">&lt;/label&gt;</span>
+    <span class="tag">&lt;select</span> <span class="attr">id</span>=<span class="str">"genero"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;option</span> <span class="attr">value</span>=<span class="str">""</span> <span class="attr">disabled</span> <span class="attr">selected</span><span class="tag">&gt;</span>Selecciona...<span class="tag">&lt;/option&gt;</span>
+      <span class="tag">&lt;option</span> <span class="attr">value</span>=<span class="str">"F"</span><span class="tag">&gt;</span>Femenino<span class="tag">&lt;/option&gt;</span>
+      <span class="tag">&lt;option</span> <span class="attr">value</span>=<span class="str">"M"</span><span class="tag">&gt;</span>Masculino<span class="tag">&lt;/option&gt;</span>
+      <span class="tag">&lt;option</span> <span class="attr">value</span>=<span class="str">"O"</span><span class="tag">&gt;</span>Otro<span class="tag">&lt;/option&gt;</span>
+    <span class="tag">&lt;/select&gt;</span>
+
+    <span class="cm">&lt;!-- Campo de contraseña --&gt;</span>
+    <span class="tag">&lt;label&gt;</span>Contraseña<span class="tag">&lt;/label&gt;</span>
+    <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="str">"password"</span> <span class="attr">id</span>=<span class="str">"password"</span>
+           <span class="attr">placeholder</span>=<span class="str">"Mínimo 6 caracteres"</span>
+           <span class="attr">minlength</span>=<span class="str">"6"</span> <span class="attr">maxlength</span>=<span class="str">"20"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="str">"button"</span> <span class="attr">id</span>=<span class="str">"btnVer"</span><span class="tag">&gt;</span>
+      Ver contraseña
+    <span class="tag">&lt;/button&gt;</span>
+
+    <span class="cm">&lt;!-- Textarea (texto largo) --&gt;</span>
+    <span class="tag">&lt;label&gt;</span>Mensaje (opcional)<span class="tag">&lt;/label&gt;</span>
+    <span class="tag">&lt;textarea</span> <span class="attr">id</span>=<span class="str">"mensaje"</span> <span class="attr">rows</span>=<span class="str">"3"</span>
+              <span class="attr">placeholder</span>=<span class="str">"Escribe algo..."</span>
+              <span class="attr">maxlength</span>=<span class="str">"500"</span><span class="tag">&gt;&lt;/textarea&gt;</span>
+
+    <span class="cm">&lt;!-- Contenedor de errores --&gt;</span>
+    <span class="tag">&lt;div</span> <span class="attr">id</span>=<span class="str">"errores"</span><span class="tag">&gt;&lt;/div&gt;</span>
+
+    <span class="cm">&lt;!-- Botones: submit envía, reset limpia --&gt;</span>
+    <span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="str">"submit"</span><span class="tag">&gt;</span>Enviar formulario<span class="tag">&lt;/button&gt;</span>
+    <span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="str">"reset"</span><span class="tag">&gt;</span>Limpiar<span class="tag">&lt;/button&gt;</span>
+  <span class="tag">&lt;/form&gt;</span>
+<span class="tag">&lt;/div&gt;</span>
+
+<span class="cm">&lt;!-- JavaScript al final del body --&gt;</span>
+<span class="tag">&lt;script</span> <span class="attr">src</span>=<span class="str">"validacion.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;/body&gt;</span>
+<span class="tag">&lt;/html&gt;</span></code></pre>
+      </div>
+
+      <!-- ── JS COMPLETO ── -->
+      <h3 style="color:var(--accent);font-size:.95rem;margin:24px 0 8px;">&#9654; Parte JavaScript — validacion.js</h3>
+      <p>Este es el archivo JavaScript completo con todas las validaciones y la acción del botón ver/ocultar contraseña.</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-lang js">JavaScript — validacion.js</span>
+        </div>
+        <pre><code><span class="cm">// ═══════════════════════════════════════</span>
+<span class="cm">// VALIDACIÓN DEL FORMULARIO DE REGISTRO</span>
+<span class="cm">// ═══════════════════════════════════════</span>
+
+<span class="cm">// ① Seleccionamos el formulario y el contenedor de errores</span>
+<span class="kw">var</span> form = document.<span class="fn">getElementById</span>(<span class="str">'miFormulario'</span>);
+<span class="kw">var</span> erroresDiv = document.<span class="fn">getElementById</span>(<span class="str">'errores'</span>);
+
+<span class="cm">// ② Escuchamos el evento "submit" del formulario</span>
+form.<span class="fn">addEventListener</span>(<span class="str">'submit'</span>, <span class="kw">function</span>(event) {
+
+  <span class="cm">// ③ Evitamos que la página se recargue</span>
+  event.<span class="fn">preventDefault</span>();
+
+  <span class="cm">// ④ Obtenemos el valor de cada campo</span>
+  <span class="kw">var</span> nombre   = document.<span class="fn">getElementById</span>(<span class="str">'nombre'</span>).value;
+  <span class="kw">var</span> email    = document.<span class="fn">getElementById</span>(<span class="str">'email'</span>).value;
+  <span class="kw">var</span> edad     = document.<span class="fn">getElementById</span>(<span class="str">'edad'</span>).value;
+  <span class="kw">var</span> fecha    = document.<span class="fn">getElementById</span>(<span class="str">'fecha'</span>).value;
+  <span class="kw">var</span> genero   = document.<span class="fn">getElementById</span>(<span class="str">'genero'</span>).value;
+  <span class="kw">var</span> password = document.<span class="fn">getElementById</span>(<span class="str">'password'</span>).value;
+
+  <span class="cm">// ⑤ Limpiamos errores anteriores</span>
+  erroresDiv.innerHTML = <span class="str">''</span>;
+
+  <span class="cm">// Quitamos el borde rojo de todos los campos</span>
+  <span class="kw">var</span> campos = form.<span class="fn">querySelectorAll</span>(<span class="str">'input, select, textarea'</span>);
+  <span class="kw">for</span> (<span class="kw">var</span> i = <span class="val">0</span>; i &lt; campos.length; i++) {
+    campos[i].style.borderColor = <span class="str">'#e0e0e0'</span>;
+  }
+
+  <span class="kw">var</span> mensajes = [];
+
+  <span class="cm">// ⑥ Validar nombre (obligatorio, mínimo 3 caracteres)</span>
+  <span class="kw">if</span> (nombre === <span class="str">''</span>) {
+    mensajes.<span class="fn">push</span>(<span class="str">'El nombre es obligatorio'</span>);
+    document.<span class="fn">getElementById</span>(<span class="str">'nombre'</span>).style.borderColor = <span class="str">'red'</span>;
+  } <span class="kw">else if</span> (nombre.length &lt; <span class="val">3</span>) {
+    mensajes.<span class="fn">push</span>(<span class="str">'El nombre debe tener al menos 3 caracteres'</span>);
+    document.<span class="fn">getElementById</span>(<span class="str">'nombre'</span>).style.borderColor = <span class="str">'red'</span>;
+  }
+
+  <span class="cm">// ⑦ Validar email (obligatorio, debe contener @)</span>
+  <span class="kw">if</span> (email === <span class="str">''</span>) {
+    mensajes.<span class="fn">push</span>(<span class="str">'El email es obligatorio'</span>);
+    document.<span class="fn">getElementById</span>(<span class="str">'email'</span>).style.borderColor = <span class="str">'red'</span>;
+  } <span class="kw">else if</span> (email.<span class="fn">indexOf</span>(<span class="str">'@'</span>) === <span class="val">-1</span>) {
+    mensajes.<span class="fn">push</span>(<span class="str">'El email debe contener @'</span>);
+    document.<span class="fn">getElementById</span>(<span class="str">'email'</span>).style.borderColor = <span class="str">'red'</span>;
+  }
+
+  <span class="cm">// ⑧ Validar edad (obligatorio, entre 1 y 120)</span>
+  <span class="kw">if</span> (edad === <span class="str">''</span>) {
+    mensajes.<span class="fn">push</span>(<span class="str">'La edad es obligatoria'</span>);
+    document.<span class="fn">getElementById</span>(<span class="str">'edad'</span>).style.borderColor = <span class="str">'red'</span>;
+  } <span class="kw">else if</span> (edad &lt; <span class="val">1</span> || edad &gt; <span class="val">120</span>) {
+    mensajes.<span class="fn">push</span>(<span class="str">'La edad debe estar entre 1 y 120'</span>);
+    document.<span class="fn">getElementById</span>(<span class="str">'edad'</span>).style.borderColor = <span class="str">'red'</span>;
+  }
+
+  <span class="cm">// ⑨ Validar fecha (obligatorio)</span>
+  <span class="kw">if</span> (fecha === <span class="str">''</span>) {
+    mensajes.<span class="fn">push</span>(<span class="str">'La fecha de nacimiento es obligatoria'</span>);
+    document.<span class="fn">getElementById</span>(<span class="str">'fecha'</span>).style.borderColor = <span class="str">'red'</span>;
+  }
+
+  <span class="cm">// ⑩ Validar género (obligatorio)</span>
+  <span class="kw">if</span> (genero === <span class="str">''</span>) {
+    mensajes.<span class="fn">push</span>(<span class="str">'Debes seleccionar un género'</span>);
+    document.<span class="fn">getElementById</span>(<span class="str">'genero'</span>).style.borderColor = <span class="str">'red'</span>;
+  }
+
+  <span class="cm">// ⑪ Validar contraseña (obligatorio, mínimo 6 caracteres)</span>
+  <span class="kw">if</span> (password === <span class="str">''</span>) {
+    mensajes.<span class="fn">push</span>(<span class="str">'La contraseña es obligatoria'</span>);
+    document.<span class="fn">getElementById</span>(<span class="str">'password'</span>).style.borderColor = <span class="str">'red'</span>;
+  } <span class="kw">else if</span> (password.length &lt; <span class="val">6</span>) {
+    mensajes.<span class="fn">push</span>(<span class="str">'La contraseña debe tener al menos 6 caracteres'</span>);
+    document.<span class="fn">getElementById</span>(<span class="str">'password'</span>).style.borderColor = <span class="str">'red'</span>;
+  }
+
+  <span class="cm">// ⑫ Mostrar errores o mensaje de éxito</span>
+  <span class="kw">if</span> (mensajes.length &gt; <span class="val">0</span>) {
+    <span class="kw">var</span> html = <span class="str">''</span>;
+    <span class="kw">for</span> (<span class="kw">var</span> j = <span class="val">0</span>; j &lt; mensajes.length; j++) {
+      html += <span class="str">'&lt;p style="color:red;"&gt;'</span> + mensajes[j] + <span class="str">'&lt;/p&gt;'</span>;
+    }
+    erroresDiv.innerHTML = html;
+  } <span class="kw">else</span> {
+    <span class="fn">alert</span>(<span class="str">'Formulario enviado correctamente'</span>);
+  }
+
+});
+
+<span class="cm">// ═══════════════════════════════════════</span>
+<span class="cm">// BOTÓN VER / OCULTAR CONTRASEÑA</span>
+<span class="cm">// ═══════════════════════════════════════</span>
+
+<span class="kw">var</span> btnVer = document.<span class="fn">getElementById</span>(<span class="str">'btnVer'</span>);
+<span class="kw">var</span> passField = document.<span class="fn">getElementById</span>(<span class="str">'password'</span>);
+
+btnVer.<span class="fn">addEventListener</span>(<span class="str">'click'</span>, <span class="kw">function</span>() {
+  <span class="kw">if</span> (passField.type === <span class="str">'password'</span>) {
+    passField.type = <span class="str">'text'</span>;
+    btnVer.textContent = <span class="str">'Ocultar contraseña'</span>;
+  } <span class="kw">else</span> {
+    passField.type = <span class="str">'password'</span>;
+    btnVer.textContent = <span class="str">'Ver contraseña'</span>;
+  }
+});
+
+<span class="cm">// ═══════════════════════════════════════</span>
+<span class="cm">// LIMPIAR ERRORES AL PRESIONAR "RESET"</span>
+<span class="cm">// ═══════════════════════════════════════</span>
+
+form.<span class="fn">addEventListener</span>(<span class="str">'reset'</span>, <span class="kw">function</span>() {
+  erroresDiv.innerHTML = <span class="str">''</span>;
+  <span class="kw">var</span> campos = form.<span class="fn">querySelectorAll</span>(<span class="str">'input, select, textarea'</span>);
+  <span class="kw">for</span> (<span class="kw">var</span> i = <span class="val">0</span>; i &lt; campos.length; i++) {
+    campos[i].style.borderColor = <span class="str">'#e0e0e0'</span>;
+  }
+});</code></pre>
+      </div>
+
+      <div class="note">
+        <span class="icon">🔑</span>
+        <span><strong>Estructura final:</strong> El archivo <code>formularioRegistro.html</code> tiene el HTML + CSS. El archivo <code>validacion.js</code> tiene toda la lógica. Ambos se conectan con <code>&lt;script src="validacion.js"&gt;</code> al final del body.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!--     PASO 6: ESTRUCTURA DE CARPETAS          -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="step">
+    <div class="step-num">06</div>
+    <div class="step-body">
+      <h2>Verificar la estructura de carpetas</h2>
+      <p>Antes de abrir el proyecto en el navegador, asegurate de que todos los archivos estén en su lugar. Así debe quedar la estructura final del proyecto:</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-lang" style="color:var(--muted)">ESTRUCTURA FINAL DEL PROYECTO</span>
+        </div>
+        <pre><code><span class="fn">mi-proyecto/</span>
+│
+├── <span class="attr">index.html</span>                <span class="cm">← Página principal (menú con tabs)</span>
+│
+├── <span class="attr">formularioRegistro.html</span>   <span class="cm">← Formulario externo (se carga con iframe)</span>
+│
+├── <span class="attr">app.js</span>                    <span class="cm">← Lógica de navegación entre tabs</span>
+│
+├── <span class="attr">validacion.js</span>             <span class="cm">← Validaciones del formulario de registro</span>
+│
+└── <span class="fn">style/</span>
+    └── <span class="attr">style.css</span>             <span class="cm">← Estilos visuales del proyecto</span></code></pre>
+      </div>
+
+      <p>Cada archivo tiene una responsabilidad clara:</p>
+
+      <div class="result-grid">
+        <div class="result-card">
+          <h4>index.html</h4>
+          <p>Contiene el <strong style="color:var(--accent2)">menú de navegación</strong> con 3 botones (Registro, Contacto, Formulario de Registro) y las 3 secciones correspondientes.</p>
+        </div>
+        <div class="result-card">
+          <h4>formularioRegistro.html</h4>
+          <p>Página <strong style="color:var(--accent2)">independiente</strong> con el formulario completo. Se carga dentro de <code>index.html</code> mediante un <code>&lt;iframe&gt;</code>.</p>
+        </div>
+      </div>
+      <div class="result-grid">
+        <div class="result-card">
+          <h4>app.js</h4>
+          <p>Controla la <strong style="color:var(--accent)">navegación por tabs</strong>: escucha clicks en los botones del menú y muestra/oculta las secciones.</p>
+        </div>
+        <div class="result-card">
+          <h4>validacion.js</h4>
+          <p>Controla las <strong style="color:var(--accent)">validaciones</strong> del formulario de registro: verifica campos, muestra errores y maneja el botón ver/ocultar contraseña.</p>
+        </div>
+      </div>
+      <div class="result-grid">
+        <div class="result-card">
+          <h4>style/style.css</h4>
+          <p>Define la <strong style="color:var(--accent3)">apariencia visual</strong> del proyecto: colores, tamaños, espaciados, bordes y animaciones.</p>
+        </div>
+        <div class="result-card">
+          <h4>¿Quién carga a quién?</h4>
+          <p><code>index.html</code> carga <strong style="color:var(--accent3)">style.css</strong> y <strong style="color:var(--accent3)">app.js</strong>.<br/><code>formularioRegistro.html</code> carga <strong style="color:var(--accent3)">validacion.js</strong>.</p>
+        </div>
+      </div>
+
+      <p>Diagrama de conexiones entre archivos:</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-lang" style="color:var(--muted)">CONEXIONES</span>
+        </div>
+        <pre><code><span class="fn">index.html</span>
+├── carga CSS ──────→ <span class="attr">style/style.css</span>     <span class="cm">(&lt;link href="style/style.css"&gt;)</span>
+├── carga JS ───────→ <span class="attr">app.js</span>              <span class="cm">(&lt;script src="app.js"&gt;)</span>
+└── carga HTML ─────→ <span class="attr">formularioRegistro.html</span>  <span class="cm">(&lt;iframe src="..."&gt;)</span>
+                       │
+                       └── carga JS ──→ <span class="attr">validacion.js</span>  <span class="cm">(&lt;script src="validacion.js"&gt;)</span></code></pre>
+      </div>
+
+      <div class="note">
+        <span class="icon">💡</span>
+        <span><strong>Importante:</strong> Todos los archivos deben estar en las rutas correctas. Si mueves un archivo de carpeta, debes actualizar la ruta en el <code>href</code> o <code>src</code> correspondiente. Por ejemplo, si <code>style.css</code> está dentro de <code>style/</code>, la ruta debe ser <code>"style/style.css"</code>, no solo <code>"style.css"</code>.</span>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- ─── DEMO EN VIVO ─── -->
+  <div class="demo-section">
+    <div class="demo-header">
+      <h2>Demo en vivo</h2>
+      <span class="demo-badge">RESULTADO FINAL</span>
+    </div>
+    <div class="demo-frame">
+      <iframe id="demo" title="Demo de campos y validaciones" srcdoc="
+<!DOCTYPE html>
+<html lang='es'>
+<head>
+<meta charset='UTF-8'/>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  .container {
+    background: white;
+    border-radius: 16px;
+    padding: 32px;
+    width: 100%;
+    max-width: 460px;
+    box-shadow: 0 8px 32px rgba(0,0,0,.1);
+  }
+  h2 {
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+    color: #1a1a2e;
+  }
+  label {
+    display: block;
+    font-size: .85rem;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 5px;
+  }
+  input, textarea, select {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: .95rem;
+    margin-bottom: 16px;
+    outline: none;
+    transition: border-color .2s;
+    font-family: inherit;
+    background: white;
+  }
+  input:focus, textarea:focus, select:focus {
+    border-color: #6c63ff;
+  }
+  .error-input {
+    border-color: #ff4444 !important;
+  }
+  .btn-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+  }
+  button {
+    padding: 12px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: .9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s;
+  }
+  .btn-submit {
+    flex: 2;
+    background: #6c63ff;
+    color: white;
+  }
+  .btn-submit:hover { background: #574fd6; }
+  .btn-reset {
+    flex: 1;
+    background: #f0f2f5;
+    color: #666;
+  }
+  .btn-reset:hover { background: #e2e4e8; }
+  .btn-toggle {
+    background: transparent;
+    color: #6c63ff;
+    font-size: .8rem;
+    padding: 4px 0;
+    margin-bottom: 8px;
+    text-align: left;
+  }
+  .btn-toggle:hover { text-decoration: underline; }
+  .errores {
+    margin-bottom: 12px;
+  }
+  .errores p {
+    background: #fff0f0;
+    border: 1px solid #ffcccc;
+    color: #cc0000;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: .85rem;
+    margin-bottom: 6px;
+  }
+  .exito {
+    background: #f0fff4;
+    border: 1px solid #c6f6d5;
+    color: #22543d;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: .9rem;
+    margin-bottom: 12px;
+    text-align: center;
+    font-weight: 600;
+  }
+  .pass-wrapper {
+    position: relative;
+  }
+  .pass-wrapper input {
+    padding-right: 90px;
+  }
+</style>
+</head>
+<body>
+<div class='container'>
+  <h2>Formulario de Registro</h2>
+  <form id='miFormulario'>
+
+    <label>Nombre completo</label>
+    <input type='text' id='nombre' placeholder='Ej: Juan Pérez' maxlength='50'/>
+
+    <label>Correo electrónico</label>
+    <input type='email' id='email' placeholder='tu@email.com'/>
+
+    <label>Edad</label>
+    <input type='number' id='edad' placeholder='Ej: 25' min='1' max='120' step='1'/>
+
+    <label>Fecha de nacimiento</label>
+    <input type='date' id='fecha' min='1950-01-01' max='2010-12-31'/>
+
+    <label>Género</label>
+    <select id='genero'>
+      <option value='' disabled selected>Selecciona...</option>
+      <option value='F'>Femenino</option>
+      <option value='M'>Masculino</option>
+      <option value='O'>Otro</option>
+    </select>
+
+    <label>Contraseña</label>
+    <div class='pass-wrapper'>
+      <input type='password' id='password' placeholder='Mínimo 6 caracteres' minlength='6' maxlength='20'/>
+    </div>
+    <button type='button' id='btnVer' class='btn-toggle'>Ver contraseña</button>
+
+    <label>Mensaje (opcional)</label>
+    <textarea id='mensaje' rows='3' placeholder='Escribe algo...' maxlength='500'></textarea>
+
+    <div id='errores' class='errores'></div>
+
+    <div class='btn-row'>
+      <button type='submit' class='btn-submit'>Enviar formulario</button>
+      <button type='reset' class='btn-reset'>Limpiar</button>
+    </div>
+  </form>
+</div>
+
+<script>
+  // Validación al enviar
+  var form = document.getElementById('miFormulario');
+  var erroresDiv = document.getElementById('errores');
+
+  form.addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    var nombre = document.getElementById('nombre').value;
+    var email = document.getElementById('email').value;
+    var edad = document.getElementById('edad').value;
+    var fecha = document.getElementById('fecha').value;
+    var genero = document.getElementById('genero').value;
+    var password = document.getElementById('password').value;
+
+    // Limpiar errores
+    erroresDiv.innerHTML = '';
+
+    // Quitar estilos de error
+    var campos = form.querySelectorAll('input, select, textarea');
+    for (var i = 0; i < campos.length; i++) {
+      campos[i].classList.remove('error-input');
+    }
+
+    var mensajes = [];
+
+    // Validar nombre
+    if (nombre === '') {
+      mensajes.push('El nombre es obligatorio');
+      document.getElementById('nombre').classList.add('error-input');
+    } else if (nombre.length < 3) {
+      mensajes.push('El nombre debe tener al menos 3 caracteres');
+      document.getElementById('nombre').classList.add('error-input');
+    }
+
+    // Validar email
+    if (email === '') {
+      mensajes.push('El email es obligatorio');
+      document.getElementById('email').classList.add('error-input');
+    } else if (email.indexOf('@') === -1) {
+      mensajes.push('El email debe contener @');
+      document.getElementById('email').classList.add('error-input');
+    }
+
+    // Validar edad
+    if (edad === '') {
+      mensajes.push('La edad es obligatoria');
+      document.getElementById('edad').classList.add('error-input');
+    } else if (edad < 1 || edad > 120) {
+      mensajes.push('La edad debe estar entre 1 y 120');
+      document.getElementById('edad').classList.add('error-input');
+    }
+
+    // Validar fecha
+    if (fecha === '') {
+      mensajes.push('La fecha de nacimiento es obligatoria');
+      document.getElementById('fecha').classList.add('error-input');
+    }
+
+    // Validar género
+    if (genero === '') {
+      mensajes.push('Debes seleccionar un género');
+      document.getElementById('genero').classList.add('error-input');
+    }
+
+    // Validar contraseña
+    if (password === '') {
+      mensajes.push('La contraseña es obligatoria');
+      document.getElementById('password').classList.add('error-input');
+    } else if (password.length < 6) {
+      mensajes.push('La contraseña debe tener al menos 6 caracteres');
+      document.getElementById('password').classList.add('error-input');
+    }
+
+    // Mostrar resultados
+    if (mensajes.length > 0) {
+      var html = '';
+      for (var j = 0; j < mensajes.length; j++) {
+        html += '<p>' + mensajes[j] + '</p>';
+      }
+      erroresDiv.innerHTML = html;
+    } else {
+      erroresDiv.innerHTML = '<div class=\"exito\">Formulario enviado correctamente</div>';
+    }
+  });
+
+  // Botón ver/ocultar contraseña
+  var btnVer = document.getElementById('btnVer');
+  var passField = document.getElementById('password');
+
+  btnVer.addEventListener('click', function() {
+    if (passField.type === 'password') {
+      passField.type = 'text';
+      btnVer.textContent = 'Ocultar contraseña';
+    } else {
+      passField.type = 'password';
+      btnVer.textContent = 'Ver contraseña';
+    }
+  });
+
+  // Limpiar errores al resetear
+  form.addEventListener('reset', function() {
+    erroresDiv.innerHTML = '';
+    var campos = form.querySelectorAll('input, select, textarea');
+    for (var i = 0; i < campos.length; i++) {
+      campos[i].classList.remove('error-input');
+    }
+  });
+<\/script>
+</body>
+</html>
+      "></iframe>
+    </div>
+  </div>
+
+</main>
+</body>
+</html>

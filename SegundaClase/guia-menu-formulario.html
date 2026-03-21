@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Guía: Menú con 2 Formularios — HTML · CSS · JS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0d0f14;
+      --surface: #13161e;
+      --border: #1f2333;
+      --accent: #5cffb1;
+      --accent2: #ff6b6b;
+      --accent3: #ffd166;
+      --text: #e8eaf0;
+      --muted: #6b7280;
+      --code-bg: #0a0c10;
+      --step-w: 780px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Sora', sans-serif;
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, #0d0f14 0%, #111827 60%, #0f1a14 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 72px 24px 60px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(92,255,177,.07), transparent);
+    }
+    .badge {
+      display: inline-block;
+      background: rgba(92,255,177,.1);
+      border: 1px solid rgba(92,255,177,.3);
+      color: var(--accent);
+      font-family: 'Space Mono', monospace;
+      font-size: .72rem;
+      letter-spacing: .12em;
+      padding: 4px 14px;
+      border-radius: 999px;
+      margin-bottom: 22px;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 700;
+      line-height: 1.15;
+      max-width: 700px;
+      margin: 0 auto 18px;
+    }
+    .hero h1 span { color: var(--accent); }
+    .hero p {
+      color: var(--muted);
+      max-width: 520px;
+      margin: 0 auto;
+      font-size: 1.05rem;
+    }
+    .tech-pills {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 32px;
+    }
+    .pill {
+      font-family: 'Space Mono', monospace;
+      font-size: .78rem;
+      padding: 5px 14px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .pill.html { border-color: #ff6b6b44; color: var(--accent2); }
+    .pill.css  { border-color: #ffd16644; color: var(--accent3); }
+    .pill.js   { border-color: #5cffb144; color: var(--accent);  }
+
+    /* ── MAIN LAYOUT ── */
+    main {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 56px 24px 100px;
+    }
+
+    /* ── SECTION TITLE ── */
+    .section-title {
+      font-family: 'Space Mono', monospace;
+      font-size: .7rem;
+      letter-spacing: .2em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    /* ── STEP CARD ── */
+    .step {
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      gap: 0 24px;
+      margin-bottom: 48px;
+      position: relative;
+    }
+    .step:not(:last-child)::before {
+      content: '';
+      position: absolute;
+      left: 27px;
+      top: 56px;
+      bottom: -48px;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--border), transparent);
+    }
+    .step-num {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Space Mono', monospace;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+    .step-body { padding-top: 12px; }
+    .step-body h2 {
+      font-size: 1.18rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .step-body p { color: var(--muted); margin-bottom: 14px; font-size: .97rem; }
+    .step-body ul {
+      list-style: none;
+      margin: 0 0 14px;
+      padding: 0;
+    }
+    .step-body ul li {
+      color: var(--muted);
+      font-size: .93rem;
+      padding-left: 18px;
+      position: relative;
+      margin-bottom: 5px;
+    }
+    .step-body ul li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: .75rem;
+    }
+    .step-body strong { color: var(--text); }
+
+    /* ── CODE BLOCK ── */
+    .code-block {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 16px 0;
+    }
+    .code-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 18px;
+      border-bottom: 1px solid var(--border);
+    }
+    .code-lang {
+      font-family: 'Space Mono', monospace;
+      font-size: .72rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .code-lang.html { color: var(--accent2); }
+    .code-lang.css  { color: var(--accent3); }
+    .code-lang.js   { color: var(--accent); }
+    .code-dots { display: flex; gap: 6px; }
+    .code-dots span {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+    pre {
+      padding: 20px 22px;
+      overflow-x: auto;
+      font-family: 'Space Mono', monospace;
+      font-size: .8rem;
+      line-height: 1.8;
+    }
+    code { display: block; white-space: pre; }
+
+    /* syntax highlight helpers */
+    .kw { color: #c792ea; }
+    .str { color: #c3e88d; }
+    .attr { color: #ffcb6b; }
+    .tag { color: #89ddff; }
+    .cm  { color: #546e7a; font-style: italic; }
+    .val { color: #f78c6c; }
+    .fn  { color: var(--accent); }
+
+    /* ── NOTE BOX ── */
+    .note {
+      background: rgba(92,255,177,.05);
+      border: 1px solid rgba(92,255,177,.2);
+      border-radius: 10px;
+      padding: 14px 18px;
+      font-size: .9rem;
+      color: #a7f3d0;
+      margin: 14px 0;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .note .icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+
+    /* ── DIVIDER ── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 52px 0;
+    }
+
+    /* ── DEMO SECTION ── */
+    .demo-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      margin-top: 56px;
+    }
+    .demo-header {
+      padding: 20px 28px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .demo-header h2 { font-size: 1.05rem; font-weight: 600; }
+    .demo-badge {
+      background: rgba(92,255,177,.12);
+      border: 1px solid rgba(92,255,177,.25);
+      color: var(--accent);
+      font-family: 'Space Mono', monospace;
+      font-size: .65rem;
+      letter-spacing: .1em;
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+    .demo-frame {
+      padding: 0;
+    }
+    iframe {
+      width: 100%;
+      height: 460px;
+      border: none;
+      display: block;
+      background: #fff;
+    }
+
+    /* ── RESULT VISUAL ── */
+    .result-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 20px 0;
+    }
+    @media (max-width: 600px) { .result-grid { grid-template-columns: 1fr; } }
+    .result-card {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      font-size: .88rem;
+    }
+    .result-card h4 {
+      font-family: 'Space Mono', monospace;
+      font-size: .72rem;
+      color: var(--accent);
+      letter-spacing: .08em;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+    .result-card p { color: var(--muted); line-height: 1.6; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════ HERO ═══════════ -->
+<header class="hero">
+  <div class="badge">GUÍA PASO A PASO</div>
+  <h1>Menú con <span>2 Formularios</span><br/>en HTML, CSS y JS</h1>
+  <p>Aprende a construir un sistema de navegación con pestañas que muestre distintos formularios de forma dinámica, sin librerías externas.</p>
+  <div class="tech-pills">
+    <span class="pill html">HTML5</span>
+    <span class="pill css">CSS3</span>
+    <span class="pill js">JavaScript ES6</span>
+  </div>
+</header>
+
+<!-- ═══════════ MAIN CONTENT ═══════════ -->
+<main>
+
+  <p class="section-title">Estructura del proyecto</p>
+  <p style="color:var(--muted);margin-bottom:36px;font-size:.95rem;">
+    Todo vive en un único archivo <strong style="color:var(--text)">index.html</strong>. Lo dividiremos en 3 partes: estructura HTML, estilos CSS y lógica JS.
+  </p>
+
+  <!-- ─── PASO 1 ─── -->
+  <div class="step">
+    <div class="step-num">01</div>
+    <div class="step-body">
+      <h2>Crear la estructura HTML base</h2>
+      <p>Define el esqueleto del documento. Necesitamos un contenedor principal, la barra de menú (con dos botones/tabs) y dos secciones de formulario ocultas por defecto.</p>
+      <ul>
+        <li>El <strong>&lt;nav&gt;</strong> contendrá los botones del menú.</li>
+        <li>Cada <strong>&lt;section&gt;</strong> representa un formulario.</li>
+        <li>Usamos el atributo <strong>data-tab</strong> para vincular botones con secciones.</li>
+      </ul>
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-lang html">HTML</span>
+        </div>
+        <pre><code><span class="cm">&lt;!-- index.html --&gt;</span>
+<span class="tag">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html</span> <span class="attr">lang</span>=<span class="str">"es"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;head&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="attr">charset</span>=<span class="str">"UTF-8"</span><span class="tag">/&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="attr">name</span>=<span class="str">"viewport"</span> <span class="attr">content</span>=<span class="str">"width=device-width, initial-scale=1.0"</span><span class="tag">/&gt;</span>
+  <span class="tag">&lt;title&gt;</span>Menú con Formularios<span class="tag">&lt;/title&gt;</span>
+  <span class="tag">&lt;link</span> <span class="attr">rel</span>=<span class="str">"stylesheet"</span> <span class="attr">href</span>=<span class="str">"style.css"</span><span class="tag">/&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+<span class="tag">&lt;body&gt;</span>
+
+  <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"container"</span><span class="tag">&gt;</span>
+
+    <span class="cm">&lt;!-- ① MENÚ DE NAVEGACIÓN --&gt;</span>
+    <span class="tag">&lt;nav</span> <span class="attr">class</span>=<span class="str">"menu"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;button</span> <span class="attr">class</span>=<span class="str">"tab-btn active"</span>
+              <span class="attr">data-tab</span>=<span class="str">"registro"</span><span class="tag">&gt;</span>
+        Registro
+      <span class="tag">&lt;/button&gt;</span>
+      <span class="tag">&lt;button</span> <span class="attr">class</span>=<span class="str">"tab-btn"</span>
+              <span class="attr">data-tab</span>=<span class="str">"contacto"</span><span class="tag">&gt;</span>
+        Contacto
+      <span class="tag">&lt;/button&gt;</span>
+    <span class="tag">&lt;/nav&gt;</span>
+
+    <span class="cm">&lt;!-- ② FORMULARIO 1: REGISTRO --&gt;</span>
+    <span class="tag">&lt;section</span> <span class="attr">id</span>=<span class="str">"registro"</span> <span class="attr">class</span>=<span class="str">"form-panel active"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;h2&gt;</span>Crear cuenta<span class="tag">&lt;/h2&gt;</span>
+      <span class="tag">&lt;form&gt;</span>
+        <span class="tag">&lt;label&gt;</span>Nombre<span class="tag">&lt;/label&gt;</span>
+        <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="str">"text"</span> <span class="attr">placeholder</span>=<span class="str">"Tu nombre"</span><span class="tag">/&gt;</span>
+
+        <span class="tag">&lt;label&gt;</span>Email<span class="tag">&lt;/label&gt;</span>
+        <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="str">"email"</span> <span class="attr">placeholder</span>=<span class="str">"tu@email.com"</span><span class="tag">/&gt;</span>
+
+        <span class="tag">&lt;label&gt;</span>Contraseña<span class="tag">&lt;/label&gt;</span>
+        <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="str">"password"</span> <span class="attr">placeholder</span>=<span class="str">"••••••••"</span><span class="tag">/&gt;</span>
+
+        <span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="str">"submit"</span><span class="tag">&gt;</span>Registrarse<span class="tag">&lt;/button&gt;</span>
+      <span class="tag">&lt;/form&gt;</span>
+    <span class="tag">&lt;/section&gt;</span>
+
+    <span class="cm">&lt;!-- ③ FORMULARIO 2: CONTACTO --&gt;</span>
+    <span class="tag">&lt;section</span> <span class="attr">id</span>=<span class="str">"contacto"</span> <span class="attr">class</span>=<span class="str">"form-panel"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;h2&gt;</span>Contáctanos<span class="tag">&lt;/h2&gt;</span>
+      <span class="tag">&lt;form&gt;</span>
+        <span class="tag">&lt;label&gt;</span>Asunto<span class="tag">&lt;/label&gt;</span>
+        <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="str">"text"</span> <span class="attr">placeholder</span>=<span class="str">"¿En qué podemos ayudar?"</span><span class="tag">/&gt;</span>
+
+        <span class="tag">&lt;label&gt;</span>Mensaje<span class="tag">&lt;/label&gt;</span>
+        <span class="tag">&lt;textarea</span> <span class="attr">rows</span>=<span class="str">"4"</span>
+                  <span class="attr">placeholder</span>=<span class="str">"Escribe tu mensaje aquí..."</span><span class="tag">&gt;&lt;/textarea&gt;</span>
+
+        <span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="str">"submit"</span><span class="tag">&gt;</span>Enviar mensaje<span class="tag">&lt;/button&gt;</span>
+      <span class="tag">&lt;/form&gt;</span>
+    <span class="tag">&lt;/section&gt;</span>
+
+  <span class="tag">&lt;/div&gt;</span>
+
+  <span class="tag">&lt;script</span> <span class="attr">src</span>=<span class="str">"app.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;/body&gt;</span>
+<span class="tag">&lt;/html&gt;</span></code></pre>
+      </div>
+      <div class="note">
+        <span class="icon">💡</span>
+        El atributo <strong>data-tab="registro"</strong> en el botón debe coincidir exactamente con el <strong>id="registro"</strong> de la sección. Esto es la clave que usará JavaScript para saber qué mostrar.
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── PASO 2 ─── -->
+  <div class="step">
+    <div class="step-num">02</div>
+    <div class="step-body">
+      <h2>Agregar los estilos CSS</h2>
+      <p>El CSS maneja dos cosas fundamentales: la apariencia visual del menú y la visibilidad de los paneles. La clase <strong>.active</strong> es la protagonista.</p>
+      <ul>
+        <li>Por defecto, <strong>todos los paneles están ocultos</strong> con <code>display: none</code>.</li>
+        <li>Solo el panel con la clase <strong>.active</strong> se muestra.</li>
+        <li>El botón activo recibe un estilo visual diferenciado.</li>
+      </ul>
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-lang css">CSS — style.css</span>
+        </div>
+        <pre><code><span class="cm">/* ── Reset básico ── */</span>
+<span class="tag">*</span> { box-sizing: border-box; margin: 0; padding: 0; }
+
+<span class="tag">body</span> {
+  font-family: sans-serif;
+  background: <span class="val">#f0f2f5</span>;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: <span class="val">100vh</span>;
+}
+
+<span class="cm">/* ── Contenedor principal ── */</span>
+<span class="fn">.container</span> {
+  background: <span class="val">white</span>;
+  border-radius: <span class="val">16px</span>;
+  padding: <span class="val">32px</span>;
+  width: <span class="val">100%</span>;
+  max-width: <span class="val">440px</span>;
+  box-shadow: <span class="val">0 8px 32px rgba(0,0,0,.1)</span>;
+}
+
+<span class="cm">/* ── Menú / tabs ── */</span>
+<span class="fn">.menu</span> {
+  display: flex;
+  gap: <span class="val">8px</span>;
+  background: <span class="val">#f0f2f5</span>;
+  padding: <span class="val">6px</span>;
+  border-radius: <span class="val">10px</span>;
+  margin-bottom: <span class="val">28px</span>;
+}
+
+<span class="fn">.tab-btn</span> {
+  flex: <span class="val">1</span>;
+  padding: <span class="val">10px</span>;
+  border: none;
+  border-radius: <span class="val">7px</span>;
+  background: transparent;
+  cursor: pointer;
+  font-size: <span class="val">.95rem</span>;
+  font-weight: <span class="val">600</span>;
+  color: <span class="val">#888</span>;
+  transition: all <span class="val">0.25s</span>;
+}
+
+<span class="cm">/* 👇 Botón activo: fondo blanco con sombra */</span>
+<span class="fn">.tab-btn.active</span> {
+  background: <span class="val">white</span>;
+  color: <span class="val">#333</span>;
+  box-shadow: <span class="val">0 2px 8px rgba(0,0,0,.12)</span>;
+}
+
+<span class="fn">.tab-btn:hover:not(.active)</span> {
+  color: <span class="val">#555</span>;
+}
+
+<span class="cm">/* ── Paneles de formulario ── */</span>
+<span class="fn">.form-panel</span> {
+  display: <span class="val">none</span>; <span class="cm">/* ← OCULTO por defecto */</span>
+  animation: fadeIn <span class="val">0.3s</span> ease;
+}
+
+<span class="fn">.form-panel.active</span> {
+  display: <span class="val">block</span>; <span class="cm">/* ← VISIBLE cuando tiene .active */</span>
+}
+
+<span class="tag">@keyframes</span> fadeIn {
+  from { opacity: <span class="val">0</span>; transform: translateY(<span class="val">8px</span>); }
+  to   { opacity: <span class="val">1</span>; transform: translateY(<span class="val">0</span>); }
+}
+
+<span class="cm">/* ── Estilos del formulario ── */</span>
+<span class="fn">.form-panel h2</span> {
+  font-size: <span class="val">1.3rem</span>;
+  margin-bottom: <span class="val">20px</span>;
+  color: <span class="val">#1a1a2e</span>;
+}
+
+<span class="tag">label</span> {
+  display: block;
+  font-size: <span class="val">.85rem</span>;
+  font-weight: <span class="val">600</span>;
+  color: <span class="val">#555</span>;
+  margin-bottom: <span class="val">5px</span>;
+}
+
+<span class="tag">input</span>, <span class="tag">textarea</span> {
+  width: <span class="val">100%</span>;
+  padding: <span class="val">10px 14px</span>;
+  border: <span class="val">1.5px solid #e0e0e0</span>;
+  border-radius: <span class="val">8px</span>;
+  font-size: <span class="val">.95rem</span>;
+  margin-bottom: <span class="val">16px</span>;
+  outline: none;
+  transition: border-color <span class="val">0.2s</span>;
+}
+
+<span class="tag">input</span>:focus, <span class="tag">textarea</span>:focus {
+  border-color: <span class="val">#6c63ff</span>;
+}
+
+<span class="tag">button</span>[type=<span class="str">"submit"</span>] {
+  width: <span class="val">100%</span>;
+  padding: <span class="val">12px</span>;
+  background: <span class="val">#6c63ff</span>;
+  color: white;
+  border: none;
+  border-radius: <span class="val">8px</span>;
+  font-size: <span class="val">1rem</span>;
+  font-weight: <span class="val">600</span>;
+  cursor: pointer;
+  transition: background <span class="val">0.2s</span>;
+}
+
+<span class="tag">button</span>[type=<span class="str">"submit"</span>]:hover {
+  background: <span class="val">#574fd6</span>;
+}</code></pre>
+      </div>
+      <div class="note">
+        <span class="icon">✨</span>
+        El truco visual clave: <strong>.form-panel</strong> tiene <code>display: none</code>. Solo cuando JS agrega la clase <strong>.active</strong> cambia a <code>display: block</code> y aparece con animación.
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── PASO 3 ─── -->
+  <div class="step">
+    <div class="step-num">03</div>
+    <div class="step-body">
+      <h2>Escribir la lógica JavaScript</h2>
+      <p>El JS es el cerebro. Cuando el usuario hace click en un botón del menú, el script quita la clase <strong>.active</strong> de todos los elementos y la agrega solo al seleccionado.</p>
+      <ul>
+        <li>Seleccionamos todos los botones y todos los paneles.</li>
+        <li>Iteramos con <strong>forEach</strong> para limpiar las clases activas.</li>
+        <li>Leemos el <strong>data-tab</strong> del botón clickeado para saber qué panel activar.</li>
+      </ul>
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-lang js">JavaScript — app.js</span>
+        </div>
+        <pre><code><span class="cm">// ① Seleccionamos todos los botones y paneles</span>
+<span class="kw">const</span> tabButtons = document.<span class="fn">querySelectorAll</span>(<span class="str">'.tab-btn'</span>);
+<span class="kw">const</span> formPanels = document.<span class="fn">querySelectorAll</span>(<span class="str">'.form-panel'</span>);
+
+<span class="cm">// ② Escuchamos clicks en cada botón</span>
+tabButtons.<span class="fn">forEach</span>(<span class="kw">function</span>(btn) {
+
+  btn.<span class="fn">addEventListener</span>(<span class="str">'click'</span>, <span class="kw">function</span>() {
+
+    <span class="cm">// A) Leemos qué tab queremos mostrar</span>
+    <span class="kw">const</span> target = btn.<span class="fn">getAttribute</span>(<span class="str">'data-tab'</span>);
+
+    <span class="cm">// B) Quitamos .active de TODOS los botones</span>
+    tabButtons.<span class="fn">forEach</span>(<span class="kw">function</span>(b) {
+      b.classList.<span class="fn">remove</span>(<span class="str">'active'</span>);
+    });
+
+    <span class="cm">// C) Quitamos .active de TODOS los paneles</span>
+    formPanels.<span class="fn">forEach</span>(<span class="kw">function</span>(panel) {
+      panel.classList.<span class="fn">remove</span>(<span class="str">'active'</span>);
+    });
+
+    <span class="cm">// D) Activamos el botón clickeado</span>
+    btn.classList.<span class="fn">add</span>(<span class="str">'active'</span>);
+
+    <span class="cm">// E) Activamos el panel cuyo id = data-tab</span>
+    document.<span class="fn">getElementById</span>(target)
+            .classList.<span class="fn">add</span>(<span class="str">'active'</span>);
+  });
+
+});</code></pre>
+      </div>
+      <div class="note">
+        <span class="icon">🔑</span>
+        <span>El flujo siempre es el mismo: <strong>limpiar todo → activar solo lo seleccionado</strong>. Este patrón funciona para 2, 3, 5 o cualquier cantidad de tabs sin cambiar el código.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── PASO 4 ─── -->
+  <div class="step">
+    <div class="step-num">04</div>
+    <div class="step-body">
+      <h2>Verificar la estructura de carpetas</h2>
+      <p>Si separas los archivos, tu proyecto debe quedar así:</p>
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-lang" style="color:var(--muted)">ESTRUCTURA</span>
+        </div>
+        <pre><code><span class="fn">mi-proyecto/</span>
+├── <span class="attr">index.html</span>    <span class="cm">← estructura y contenido</span>
+├── <span class="attr">style.css</span>     <span class="cm">← apariencia visual</span>
+└── <span class="attr">app.js</span>        <span class="cm">← lógica de las tabs</span></code></pre>
+      </div>
+      <div class="result-grid">
+        <div class="result-card">
+          <h4>✅ Tiene .active</h4>
+          <p>El panel o botón es <strong style="color:var(--accent)">visible</strong> y aparece destacado en el menú.</p>
+        </div>
+        <div class="result-card">
+          <h4>❌ Sin .active</h4>
+          <p>El panel está <strong style="color:var(--accent2)">oculto</strong> con <code>display:none</code> y el botón luce inactivo.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- ─── DEMO EN VIVO ─── -->
+  <div class="demo-section">
+    <div class="demo-header">
+      <h2>Demo en vivo</h2>
+      <span class="demo-badge">RESULTADO FINAL</span>
+    </div>
+    <div class="demo-frame">
+      <iframe id="demo" title="Demo del menú con formularios" srcdoc="
+<!DOCTYPE html>
+<html lang='es'>
+<head>
+<meta charset='UTF-8'/>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+  .container {
+    background: white;
+    border-radius: 16px;
+    padding: 32px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 8px 32px rgba(0,0,0,.1);
+    margin: 20px;
+  }
+  .menu {
+    display: flex;
+    gap: 8px;
+    background: #f0f2f5;
+    padding: 6px;
+    border-radius: 10px;
+    margin-bottom: 28px;
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 7px;
+    background: transparent;
+    cursor: pointer;
+    font-size: .95rem;
+    font-weight: 600;
+    color: #888;
+    transition: all 0.25s;
+  }
+  .tab-btn.active {
+    background: white;
+    color: #333;
+    box-shadow: 0 2px 8px rgba(0,0,0,.12);
+  }
+  .form-panel { display: none; animation: f .3s ease; }
+  .form-panel.active { display: block; }
+  @keyframes f { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+  h2 { font-size: 1.3rem; margin-bottom: 20px; color: #1a1a2e; }
+  label { display: block; font-size: .85rem; font-weight: 600; color: #555; margin-bottom: 5px; }
+  input, textarea {
+    width: 100%; padding: 10px 14px;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 8px; font-size: .95rem;
+    margin-bottom: 16px; outline: none;
+    transition: border-color .2s;
+  }
+  input:focus, textarea:focus { border-color: #6c63ff; }
+  button[type=submit] {
+    width: 100%; padding: 12px;
+    background: #6c63ff; color: white;
+    border: none; border-radius: 8px;
+    font-size: 1rem; font-weight: 600;
+    cursor: pointer; transition: background .2s;
+  }
+  button[type=submit]:hover { background: #574fd6; }
+</style>
+</head>
+<body>
+<div class='container'>
+  <nav class='menu'>
+    <button class='tab-btn active' data-tab='registro'>Registro</button>
+    <button class='tab-btn' data-tab='contacto'>Contacto</button>
+  </nav>
+  <section id='registro' class='form-panel active'>
+    <h2>Crear cuenta</h2>
+    <form>
+      <label>Nombre</label>
+      <input type='text' placeholder='Tu nombre'/>
+      <label>Email</label>
+      <input type='email' placeholder='tu@email.com'/>
+      <label>Contraseña</label>
+      <input type='password' placeholder='••••••••'/>
+      <button type='submit'>Registrarse</button>
+    </form>
+  </section>
+  <section id='contacto' class='form-panel'>
+    <h2>Contáctanos</h2>
+    <form>
+      <label>Asunto</label>
+      <input type='text' placeholder='¿En qué podemos ayudar?'/>
+      <label>Mensaje</label>
+      <textarea rows='4' placeholder='Escribe tu mensaje aquí...'></textarea>
+      <button type='submit'>Enviar mensaje</button>
+    </form>
+  </section>
+</div>
+<script>
+  const btns = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.form-panel');
+  btns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      const target = btn.getAttribute('data-tab');
+      btns.forEach(function(b){ b.classList.remove('active'); });
+      panels.forEach(function(p){ p.classList.remove('active'); });
+      btn.classList.add('active');
+      document.getElementById(target).classList.add('active');
+    });
+  });
+<\/script>
+</body>
+</html>
+      "></iframe>
+    </div>
+  </div>
+
+</main>
+</body>
+</html>

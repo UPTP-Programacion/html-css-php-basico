@@ -1,0 +1,116 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: sans-serif;
+  background: #ffc1db;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* ── Contenedor principal ── */
+.container {
+  background: rgb(255, 255, 255);
+  border-radius: 16px;
+  padding: 32px;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.1);
+}
+
+/* ── Menú / tabs ── */
+.menu {
+  display: flex;
+  gap: 8px;
+  background: #ff5ce9;
+  padding: 6px;
+  border-radius: 10px;
+  margin-bottom: 28px;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  cursor: pointer;
+  font-size: .95rem;
+  font-weight: 600;
+  color: #080606;
+  transition: all 0.25s;
+}
+
+/* 👇 Botón activo: fondo blanco con sombra */
+.tab-btn.active {
+  background: white;
+  color: #0e0c0c;
+  box-shadow: 0 2px 8px rgba(0,0,0,.12);
+}
+
+.tab-btn:hover:not(.active) {
+  color: #161111;
+}
+
+/* ── Paneles de formulario ── */
+.form-panel {
+  display: none; /* ← OCULTO por defecto */
+  animation: fadeIn 0.3s ease;
+}
+
+.form-panel.active {
+  display: block; /* ← VISIBLE cuando tiene .active */
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Estilos del formulario ── */
+.form-panel h2 {
+  font-size: 1.3rem;
+  margin-bottom: 20px;
+  color: #1a1a2e;
+}
+
+label {
+  display: block;
+  font-size: .85rem;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 5px;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: .95rem;
+  margin-bottom: 16px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+input:focus, textarea:focus {
+  border-color: #ff63f2;
+}
+
+button[type="submit"] {
+  width: 100%;
+  padding: 12px;
+  background: #ed63ff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+button[type="submit"]:hover {
+  background: #d14fd6;
+}
