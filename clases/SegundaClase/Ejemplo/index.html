@@ -1,0 +1,87 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Menú con Formularios</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- ① MENÚ DE NAVEGACIÓN -->
+    <nav class="menu">
+      <button class="tab-btn active"
+              data-tab="home">
+        Home
+      </button>
+      <button class="tab-btn"
+              data-tab="producto">
+        Productos
+      </button>
+      <button class="tab-btn"
+              data-tab="contacto">
+        Conocenos
+      </button>
+      <button class="tab-btn"
+              data-tab="login">
+        Login
+      </button>
+    </nav>
+
+    <!-- ② FORMULARIO 1: REGISTRO -->
+    <section id="home" class="form-panel active">
+      <h2>Primera Clase HTML Basico Structural</h2>
+      <p>Bienvenido a nuestra página de ejemplo.</p>
+    </section>
+    
+
+
+    
+
+    <!-- ③ FORMULARIO 2: CONTACTO -->
+    <section id="contacto" class="form-panel">
+      <h2>Contáctanos</h2>
+      <form>
+        <label>Asunto</label>
+        <input type="text" placeholder="¿En qué podemos ayudar?"/>
+
+        <label>Mensaje</label>
+        <textarea rows="4"
+                  placeholder="Escribe tu mensaje aquí..."></textarea>
+
+        <button type="submit">Enviar mensaje</button>
+      </form>
+    </section>
+
+    <!-- ③ FORMULARIO 3: Otros -->
+    <section id="producto" class="form-panel">
+      <h2>Productos</h2>
+      <p>Conoce nuestros productos y servicios.</p>
+      <ul>
+        <li>Producto A</li>
+        <li>Producto B</li>
+        <li>Producto C</li>
+      </ul>
+    </section>  
+
+    <section id="login" class="form-panel">
+      <h2>Login</h2>
+      <form>
+        <label>Usuario</label>
+        <input type="text" placeholder="Ingresa tu usuario"/>
+
+        <label>Contraseña</label>
+        <input type="password" placeholder="Ingresa tu contraseña"/>
+
+        <button type="submit">Iniciar sesión</button>
+      </form>
+    </section>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
