@@ -1,0 +1,262 @@
+/* ===================================================================
+   ESTILOS CSS - Sistema de Tabs con Formularios
+   =================================================================== */
+
+/* ① RESET CSS UNIVERSAL
+   --------------------------------------------------------
+   El selector * (asterisco) selecciona TODOS los elementos HTML.
+   box-sizing: border-box → el padding y border se incluyen DENTRO
+   del ancho/alto total del elemento (no se suman por fuera).
+   Sin esto, un elemento de width:100px con padding:10px mediría 120px.
+   margin: 0; padding: 0; → elimina los márgenes y rellenos predeterminados
+   que cada navegador aplica de forma diferente.
+   Ref *: https://developer.mozilla.org/es/docs/Web/CSS/Universal_selectors
+   Ref box-sizing: https://developer.mozilla.org/es/docs/Web/CSS/box-sizing
+   Ref margin: https://developer.mozilla.org/es/docs/Web/CSS/margin
+   Ref padding: https://developer.mozilla.org/es/docs/Web/CSS/padding */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ② ESTILOS DEL BODY
+   --------------------------------------------------------
+   font-family: sans-serif → usa la fuente sans-serif predeterminada del sistema.
+   background: #f0f2f5 → fondo gris claro (similar al fondo de Facebook).
+   display: flex → activa el modelo Flexbox para alinear contenido.
+   justify-content: center → centra horizontalmente el contenido.
+   align-items: center → centra verticalmente el contenido.
+   min-height: 100vh → el body ocupa al menos el 100% de la altura visible.
+   vh = viewport height (altura de la ventana del navegador).
+   Ref display flex: https://developer.mozilla.org/es/docs/Web/CSS/display
+   Ref Guía Flexbox: https://developer.mozilla.org/es/docs/Web/CSS/CSS_flexible_box_layout/Basic_concepts_of_flexbox
+   Ref justify-content: https://developer.mozilla.org/es/docs/Web/CSS/justify-content
+   Ref align-items: https://developer.mozilla.org/es/docs/Web/CSS/align-items
+   Ref min-height: https://developer.mozilla.org/es/docs/Web/CSS/min-height
+   Ref unidades vh: https://developer.mozilla.org/es/docs/Web/CSS/length#vh */
+body {
+  font-family: sans-serif;
+  background: #f0f2f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* ③ CONTENEDOR PRINCIPAL (.container)
+   --------------------------------------------------------
+   background: white → fondo blanco para la tarjeta.
+   border-radius: 16px → esquinas redondeadas (mayor valor = más redondas).
+   padding: 32px → espacio interno entre el borde y el contenido.
+   width: 100% → ocupa todo el ancho disponible...
+   max-width: 600px → ...pero nunca más de 600px (diseño responsivo).
+   height: 600px → altura fija de 600 píxeles.
+   box-shadow → sombra que da efecto de elevación/profundidad.
+     0 = desplazamiento horizontal
+     8px = desplazamiento vertical
+     32px = difuminado (blur)
+     rgba(0,0,0,.1) = color negro con 10% de opacidad
+   Ref border-radius: https://developer.mozilla.org/es/docs/Web/CSS/border-radius
+   Ref box-shadow: https://developer.mozilla.org/es/docs/Web/CSS/box-shadow
+   Ref max-width: https://developer.mozilla.org/es/docs/Web/CSS/max-width
+   Ref rgba: https://developer.mozilla.org/es/docs/Web/CSS/color_value/rgba */
+.container {
+  background: white;
+  border-radius: 16px;
+  padding: 32px;
+  width: 100%;
+  max-width: 600px;
+  height: 600px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.1);
+}
+
+/* ④ BARRA DE MENÚ / TABS (.menu)
+   --------------------------------------------------------
+   display: flex → los botones se alinean en fila horizontal.
+   gap: 8px → espacio de 8px entre cada botón (sin necesidad de margin).
+   background: #f0f2f5 → fondo gris para distinguir la barra del contenido.
+   padding: 6px → espacio interno alrededor de los botones.
+   border-radius: 10px → esquinas redondeadas de la barra completa.
+   margin-bottom: 28px → espacio debajo de la barra antes del contenido.
+   Ref gap: https://developer.mozilla.org/es/docs/Web/CSS/gap */
+.menu {
+  display: flex;
+  gap: 8px;
+  background: #f0f2f5;
+  padding: 6px;
+  border-radius: 10px;
+  margin-bottom: 28px;
+}
+
+/* ⑤ BOTONES DE TAB (.tab-btn)
+   --------------------------------------------------------
+   flex: 1 → cada botón ocupa el mismo espacio disponible (distribución equitativa).
+   border: none → elimina el borde predeterminado del botón.
+   background: transparent → fondo transparente (inactivo por defecto).
+   cursor: pointer → el cursor cambia a manita al pasar sobre el botón.
+   font-size: .95rem → tamaño de fuente relativo al root (rem = root em).
+   font-weight: 600 → grosor de la fuente (400=normal, 600=semi-bold, 700=bold).
+   color: #888 → color gris para botones inactivos.
+   transition: all 0.25s → anima TODOS los cambios de propiedad en 0.25 segundos.
+   Ref flex: https://developer.mozilla.org/es/docs/Web/CSS/flex
+   Ref cursor: https://developer.mozilla.org/es/docs/Web/CSS/cursor
+   Ref font-weight: https://developer.mozilla.org/es/docs/Web/CSS/font-weight
+   Ref rem: https://developer.mozilla.org/es/docs/Web/CSS/length#rem
+   Ref transition: https://developer.mozilla.org/es/docs/Web/CSS/transition */
+.tab-btn {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  cursor: pointer;
+  font-size: .95rem;
+  font-weight: 600;
+  color: #888;
+  transition: all 0.25s;
+}
+
+/* ⑥ BOTÓN ACTIVO (.tab-btn.active)
+   --------------------------------------------------------
+   Cuando JavaScript agrega la clase "active" al botón (classList.add('active')),
+   estos estilos se aplican: fondo blanco, texto oscuro y sombra sutil.
+   El selector .tab-btn.active selecciona elementos que tienen AMBAS clases.
+   Ref selectores de clase: https://developer.mozilla.org/es/docs/Web/CSS/Class_selectors
+   Ref selectores compuestos: https://developer.mozilla.org/es/docs/Web/CSS/CSS_selectors/Selector_structure#compound_selector */
+.tab-btn.active {
+  background: white;
+  color: #333;
+  box-shadow: 0 2px 8px rgba(0,0,0,.12);
+}
+
+/* ⑦ HOVER EN BOTONES INACTIVOS
+   --------------------------------------------------------
+   :hover se activa cuando el cursor está sobre el elemento.
+   :not(.active) excluye los botones que ya tienen la clase "active".
+   Así solo cambia el color de los botones inactivos al pasar el mouse.
+   Ref :hover: https://developer.mozilla.org/es/docs/Web/CSS/:hover
+   Ref :not(): https://developer.mozilla.org/es/docs/Web/CSS/:not */
+.tab-btn:hover:not(.active) {
+  color: #555;
+}
+
+/* ⑧ PANELES DE CONTENIDO (.form-panel)
+   --------------------------------------------------------
+   display: none → OCULTOS por defecto. Ningún panel se muestra inicialmente
+   a menos que tenga también la clase "active".
+   animation: fadeIn 0.3s ease → al aparecer, ejecuta la animación "fadeIn"
+   durante 0.3 segundos con curva de aceleración "ease" (suave).
+   Ref display: https://developer.mozilla.org/es/docs/Web/CSS/display
+   Ref animation: https://developer.mozilla.org/es/docs/Web/CSS/animation */
+.form-panel {
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+
+/* ⑨ PANEL ACTIVO (.form-panel.active)
+   --------------------------------------------------------
+   Cuando JavaScript agrega "active", el panel pasa de display:none
+   a display:block, haciéndolo visible. Este cambio también dispara
+   la animación fadeIn definida arriba.
+   Ref display block: https://developer.mozilla.org/es/docs/Web/CSS/display */
+.form-panel.active {
+  display: block;
+}
+
+/* ⑩ ANIMACIÓN fadeIn
+   --------------------------------------------------------
+   @keyframes define una animación CSS con estados intermedios.
+   from → estado inicial (opacity:0 = invisible, translateY(8px) = desplazado 8px abajo).
+   to → estado final (opacity:1 = visible, translateY(0) = posición original).
+   El resultado es que el panel aparece con un efecto de desvanecimiento
+   mientras se desliza ligeramente hacia arriba.
+   Ref @keyframes: https://developer.mozilla.org/es/docs/Web/CSS/@keyframes
+   Ref opacity: https://developer.mozilla.org/es/docs/Web/CSS/opacity
+   Ref transform: https://developer.mozilla.org/es/docs/Web/CSS/transform
+   Ref translateY: https://developer.mozilla.org/es/docs/Web/CSS/transform-function/translateY */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ⑪ TÍTULOS DE LOS PANELES
+   --------------------------------------------------------
+   Estilos para los <h2> dentro de cada panel de formulario.
+   color: #1a1a2e → azul muy oscuro (casi negro) para los títulos.
+   Ref font-size: https://developer.mozilla.org/es/docs/Web/CSS/font-size */
+.form-panel h2 {
+  font-size: 1.3rem;
+  margin-bottom: 20px;
+  color: #1a1a2e;
+}
+
+/* ⑫ ETIQUETAS DE CAMPOS (label)
+   --------------------------------------------------------
+   display: block → ocupa toda la línea (fuerza salto de línea después).
+   Por defecto <label> es inline (en la misma línea que otros elementos).
+   Ref label styling: https://developer.mozilla.org/es/docs/Web/HTML/Element/label */
+label {
+  display: block;
+  font-size: .85rem;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 5px;
+}
+
+/* ⑬ CAMPOS DE FORMULARIO (input, select, textarea)
+   --------------------------------------------------------
+   width: 100% → ocupan todo el ancho del contenedor.
+   padding: 10px 14px → espacio interno (10px arriba/abajo, 14px izq/der).
+   border: 1.5px solid #e0e0e0 → borde gris claro de 1.5px.
+   outline: none → elimina el contorno azul predeterminado del navegador al enfocar.
+   transition: border-color 0.2s → anima el cambio de color del borde al enfocar.
+   Ref input styling: https://developer.mozilla.org/es/docs/Web/CSS/CSS_basic_user_interface
+   Ref outline: https://developer.mozilla.org/es/docs/Web/CSS/outline
+   Ref border: https://developer.mozilla.org/es/docs/Web/CSS/border */
+input, select, textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: .95rem;
+  margin-bottom: 16px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+/* ⑭ ESTADO FOCUS DE LOS CAMPOS
+   --------------------------------------------------------
+   :focus se activa cuando el usuario hace click o navega con Tab al campo.
+   Cambia el color del borde a morado (#6c63ff) para indicar visualmente
+   qué campo está activo/seleccionado.
+   Ref :focus: https://developer.mozilla.org/es/docs/Web/CSS/:focus */
+input:focus, textarea:focus {
+  border-color: #6c63ff;
+}
+
+/* ⑮ BOTÓN DE ENVÍO (submit)
+   --------------------------------------------------------
+   Selector por atributo: button[type="submit"] selecciona solo
+   los botones con type="submit" (no afecta a type="reset" o type="button").
+   background: #6c63ff → fondo morado (color principal de la app).
+   Ref selector de atributo: https://developer.mozilla.org/es/docs/Web/CSS/Attribute_selectors
+   Ref background: https://developer.mozilla.org/es/docs/Web/CSS/background */
+button[type="submit"] {
+  width: 100%;
+  padding: 12px;
+  background: #6c63ff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+/* ⑯ HOVER DEL BOTÓN SUBMIT
+   --------------------------------------------------------
+   Al pasar el mouse sobre el botón, el fondo se oscurece ligeramente
+   (#574fd6 es un morado más oscuro que #6c63ff).
+   La transition definida arriba (0.2s) hace que el cambio sea suave.
+   Ref :hover: https://developer.mozilla.org/es/docs/Web/CSS/:hover */
+button[type="submit"]:hover {
+  background: #574fd6;
+}

@@ -1,0 +1,220 @@
+<!-- ===================================================================
+     INDEX.HTML - Página principal con sistema de Tabs (pestañas)
+     =================================================================== -->
+
+<!-- ① DECLARACIÓN DEL TIPO DE DOCUMENTO
+     DOCTYPE indica al navegador que este es un documento HTML5.
+     Sin esta línea, el navegador podría entrar en "quirks mode"
+     y renderizar la página de forma inconsistente.
+     Ref: https://developer.mozilla.org/es/docs/Glossary/Doctype -->
+<!DOCTYPE html>
+
+<!-- ② ELEMENTO RAÍZ HTML
+     <html> es el elemento raíz que envuelve todo el contenido.
+     lang="es" indica que el idioma del contenido es español.
+     Esto ayuda a lectores de pantalla y motores de búsqueda (SEO).
+     Ref: https://developer.mozilla.org/es/docs/Web/HTML/Element/html
+     Ref lang: https://developer.mozilla.org/es/docs/Web/HTML/Global_attributes/lang -->
+<html lang="es">
+
+<!-- ③ SECCIÓN HEAD - Metadatos del documento
+     <head> contiene información SOBRE la página (no se muestra en pantalla).
+     Incluye: charset, viewport, título, enlaces a CSS, etc.
+     Ref: https://developer.mozilla.org/es/docs/Web/HTML/Element/head -->
+<head>
+  <!-- charset="UTF-8" define la codificación de caracteres.
+       UTF-8 soporta todos los idiomas (ñ, á, é, 中文, العربية, etc.)
+       Ref: https://developer.mozilla.org/es/docs/Web/HTML/Element/meta#charset -->
+  <meta charset="UTF-8"/>
+
+  <!-- viewport controla cómo se muestra la página en dispositivos móviles.
+       width=device-width: el ancho se ajusta al ancho del dispositivo.
+       initial-scale=1.0: sin zoom inicial.
+       Sin esta línea, la página se vería diminuta en celulares.
+       Ref: https://developer.mozilla.org/es/docs/Web/HTML/Viewport_meta_tag -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <!-- <title> define el texto que aparece en la pestaña del navegador.
+       También es usado por Google como título en resultados de búsqueda.
+       Ref: https://developer.mozilla.org/es/docs/Web/HTML/Element/title -->
+  <title>Menú con Formularios</title>
+
+  <!-- <link rel="stylesheet"> enlaza un archivo CSS externo.
+       href="style.css" indica la ruta al archivo de estilos.
+       Esto separa la presentación (CSS) de la estructura (HTML).
+       Ref: https://developer.mozilla.org/es/docs/Web/HTML/Element/link -->
+  <link rel="stylesheet" href="style.css"/>
+</head>
+
+<!-- ④ SECCIÓN BODY - Contenido visible de la página
+     Todo lo que está dentro de <body> se renderiza en el navegador.
+     Ref: https://developer.mozilla.org/es/docs/Web/HTML/Element/body -->
+<body>
+
+  <!-- ⑤ CONTENEDOR PRINCIPAL
+       <div> es un contenedor genérico sin significado semántico.
+       class="container" le asigna una clase CSS para darle estilos
+       (fondo blanco, bordes redondeados, sombra, ancho máximo).
+       Ref: https://developer.mozilla.org/es/docs/Web/HTML/Element/div
+       Ref class: https://developer.mozilla.org/es/docs/Web/HTML/Global_attributes/class -->
+  <div class="container">
+
+    <!-- ⑥ MENÚ DE NAVEGACIÓN CON TABS
+         <nav> es un elemento semántico que indica una sección de navegación.
+         Ayuda a lectores de pantalla a identificar el menú.
+         Ref: https://developer.mozilla.org/es/docs/Web/HTML/Element/nav -->
+    <nav class="menu">
+
+      <!-- Cada <button> es un botón de pestaña.
+           class="tab-btn" → estilos CSS del botón.
+           class="active" → indica cuál pestaña está seleccionada inicialmente.
+           data-tab="home" → atributo personalizado (data-*) que almacena
+           el id del panel que este botón debe mostrar al hacer click.
+           El JavaScript (app.js) lee este atributo con getAttribute('data-tab').
+           Ref button: https://developer.mozilla.org/es/docs/Web/HTML/Element/button
+           Ref data-*: https://developer.mozilla.org/es/docs/Learn/HTML/Howto/Use_data_attributes -->
+      <button class="tab-btn active"
+              data-tab="home">
+        Home
+      </button>
+      <button class="tab-btn"
+              data-tab="producto">
+        Productos
+      </button>
+      <button class="tab-btn"
+              data-tab="contacto">
+        Conocenos
+      </button>
+      <button class="tab-btn"
+              data-tab="login">
+        Login
+      </button>
+       <!-- Botón que carga contenido desde un archivo HTML externo via iframe -->
+            <button class="tab-btn"
+                    data-tab="formularioRegistro">
+                Archiovo Externo
+            </button>
+    </nav>
+
+    <!-- ⑦ PANEL 1: HOME (visible por defecto)
+         <section> es un elemento semántico que agrupa contenido temático.
+         id="home" → identificador único para que JavaScript lo encuentre
+         con getElementById('home').
+         class="form-panel" → estilos CSS (oculto por defecto con display:none).
+         class="active" → lo hace visible (display:block en CSS).
+         Ref section: https://developer.mozilla.org/es/docs/Web/HTML/Element/section
+         Ref id: https://developer.mozilla.org/es/docs/Web/HTML/Global_attributes/id -->
+    <section id="home" class="form-panel active">
+      <!-- <h2> es un encabezado de nivel 2 (subtítulo).
+           Los niveles van de h1 (más importante) a h6 (menos importante).
+           Ref: https://developer.mozilla.org/es/docs/Web/HTML/Element/Heading_Elements -->
+      <h2>Primera Clase HTML Basico Structural</h2>
+      <!-- <p> define un párrafo de texto.
+           Ref: https://developer.mozilla.org/es/docs/Web/HTML/Element/p -->
+      <p>Bienvenido a nuestra página de ejemplo.</p>
+    </section>
+
+
+    <!-- ⑧ PANEL 2: CONTACTO (oculto por defecto, sin clase "active")
+         Contiene un formulario de contacto con campos de texto. -->
+    <section id="contacto" class="form-panel">
+      <h2>Contáctanos</h2>
+
+      <!-- <form> define un formulario HTML para enviar datos.
+           Sin atributo action, el formulario se envía a la misma página.
+           Sin atributo method, usa GET por defecto.
+           Ref: https://developer.mozilla.org/es/docs/Web/HTML/Element/form -->
+      <form>
+        <!-- <label> etiqueta descriptiva para un campo de formulario.
+             Mejora la accesibilidad: lectores de pantalla lo leen al enfocar el campo.
+             Ref: https://developer.mozilla.org/es/docs/Web/HTML/Element/label -->
+        <label>Asunto</label>
+
+        <!-- <input type="text"> crea un campo de texto de una sola línea.
+             placeholder muestra texto de ayuda que desaparece al escribir.
+             Ref input: https://developer.mozilla.org/es/docs/Web/HTML/Element/input
+             Ref type="text": https://developer.mozilla.org/es/docs/Web/HTML/Element/input/text -->
+        <input type="text" placeholder="¿En qué podemos ayudar?"/>
+
+        <label>Mensaje</label>
+
+        <!-- <textarea> crea un campo de texto multilínea.
+             rows="4" define la altura visible (4 líneas de texto).
+             A diferencia de <input>, permite saltos de línea.
+             Ref: https://developer.mozilla.org/es/docs/Web/HTML/Element/textarea -->
+        <textarea rows="4"
+                  placeholder="Escribe tu mensaje aquí..."></textarea>
+
+        <!-- type="submit" convierte el botón en un disparador del evento submit.
+             Al hacer click, el formulario intenta enviar sus datos.
+             Ref: https://developer.mozilla.org/es/docs/Web/HTML/Element/input/submit -->
+        <button type="submit">Enviar mensaje</button>
+      </form>
+    </section>
+
+    <!-- ⑨ PANEL 3: PRODUCTOS (oculto por defecto) -->
+    <section id="producto" class="form-panel">
+      <h2>Productos</h2>
+      <p>Conoce nuestros productos y servicios.</p>
+
+      <!-- <ul> crea una lista desordenada (con viñetas/bullets).
+           Cada <li> es un elemento de la lista.
+           Ref ul: https://developer.mozilla.org/es/docs/Web/HTML/Element/ul
+           Ref li: https://developer.mozilla.org/es/docs/Web/HTML/Element/li -->
+      <ul>
+        <li>Producto A</li>
+        <li>Producto B</li>
+        <li>Producto C</li>
+      </ul>
+    </section>
+
+    <!-- ⑩ PANEL 4: LOGIN (oculto por defecto)
+         Formulario de inicio de sesión con usuario y contraseña. -->
+    <section id="login" class="form-panel">
+      <h2>Login</h2>
+      <form>
+        <label>Usuario</label>
+        <input type="text" placeholder="Ingresa tu usuario"/>
+
+        <label>Contraseña</label>
+
+        <!-- type="password" oculta los caracteres escritos con puntos (•••).
+             Es fundamental para campos de contraseña por seguridad visual.
+             Ref: https://developer.mozilla.org/es/docs/Web/HTML/Element/input/password -->
+        <input type="password" placeholder="Ingresa tu contraseña"/>
+
+        <button type="submit">Iniciar sesión</button>
+      </form>
+    </section>
+
+    <!-- ⑪ PANEL 5: FORMULARIO EXTERNO (cargado via iframe)
+         Este panel carga un archivo HTML independiente dentro de un iframe. -->
+    <section id="formularioRegistro" class="form-panel">
+
+        <!-- <iframe> incrusta otro documento HTML dentro de la página actual.
+             src="formularioRegistro.html" → ruta del archivo a cargar.
+             width="100%" → ocupa todo el ancho del contenedor.
+             height="450" → altura fija de 450 píxeles.
+             style="border: none" → elimina el borde predeterminado del iframe.
+             NOTA: El documento dentro del iframe tiene su propio DOM,
+             CSS y JavaScript independientes del documento padre.
+             Ref: https://developer.mozilla.org/es/docs/Web/HTML/Element/iframe -->
+        <iframe
+            src="formularioRegistro.html"
+            width="100%"
+            height="450"
+            style="border: none; border-radius: 8px;"
+        ></iframe>
+    </section>
+
+  </div>
+
+  <!-- ⑫ SCRIPT DE JAVASCRIPT
+       <script src="app.js"> carga y ejecuta un archivo JavaScript externo.
+       Se coloca al final del body para que el HTML ya esté cargado
+       cuando el script intente acceder a los elementos del DOM.
+       Si se coloca en el <head>, los elementos aún no existirían.
+       Ref: https://developer.mozilla.org/es/docs/Web/HTML/Element/script -->
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!-- ===================================================================
+     FORMULARIO DE REGISTRO - Página independiente (cargada en iframe)
+     =================================================================== -->
+
+<!-- ① DOCTYPE y elemento raíz
+     Ref DOCTYPE: https://developer.mozilla.org/es/docs/Glossary/Doctype
+     Ref html: https://developer.mozilla.org/es/docs/Web/HTML/Element/html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <!-- charset UTF-8 para soportar caracteres especiales (ñ, á, é, etc.)
+       Ref: https://developer.mozilla.org/es/docs/Web/HTML/Element/meta#charset -->
+  <meta charset="UTF-8"/>
+  <title>Formulario de Registro</title>
+
+  <!-- Enlace al mismo archivo CSS que usa index.html para mantener
+       estilos consistentes dentro del iframe.
+       Ref: https://developer.mozilla.org/es/docs/Web/HTML/Element/link -->
+   <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- ② CONTENEDOR PRINCIPAL -->
+<div class="container">
+
+  <!-- ③ FORMULARIO DE REGISTRO
+       <form> agrupa campos de entrada para recopilar datos del usuario.
+       id="miFormulario" permite que JavaScript lo seleccione con getElementById().
+       Sin atributo action ni method, el formulario no se envía a ningún servidor
+       (lo manejamos completamente con JavaScript en validacion.js).
+       Ref: https://developer.mozilla.org/es/docs/Web/HTML/Element/form -->
+  <form id="miFormulario">
+
+    <!-- ④ CAMPO DE TEXTO - Nombre
+         type="text" crea un campo de entrada de texto simple (una línea).
+         id="nombre" → identificador para que JS acceda al valor con getElementById().
+         placeholder → texto de ayuda visible cuando el campo está vacío.
+         maxlength="10" → limita a 10 caracteres máximo (validación HTML nativa).
+         El navegador no permitirá escribir más de 10 caracteres.
+         Ref input text: https://developer.mozilla.org/es/docs/Web/HTML/Element/input/text
+         Ref maxlength: https://developer.mozilla.org/es/docs/Web/HTML/Attributes/maxlength
+         Ref placeholder: https://developer.mozilla.org/es/docs/Web/HTML/Element/input#placeholder -->
+    <label>Nombre completo</label>
+    <input type="text" id="nombre"
+           placeholder="Ej: Yorgerys"
+           maxlength="10"/>
+
+    <!-- ⑤ CAMPO DE EMAIL
+         type="email" activa validación nativa del navegador para emails.
+         En móviles, muestra un teclado optimizado con @ y .com
+         El navegador verifica automáticamente que tenga formato usuario@dominio.
+         Ref: https://developer.mozilla.org/es/docs/Web/HTML/Element/input/email -->
+    <label>Correo electrónico</label>
+    <input type="email" id="email"
+           placeholder="dorana@email.com"/>
+
+    <!-- ⑥ CAMPO NUMÉRICO - Edad
+         type="number" solo permite ingresar números.
+         Muestra flechas arriba/abajo para incrementar/decrementar.
+         min="1" → valor mínimo permitido.
+         max="120" → valor máximo permitido.
+         step="1" → incrementos de 1 en 1 (solo enteros, no decimales).
+         Ref: https://developer.mozilla.org/es/docs/Web/HTML/Element/input/number
+         Ref min/max: https://developer.mozilla.org/es/docs/Web/HTML/Attributes/min
+         Ref step: https://developer.mozilla.org/es/docs/Web/HTML/Attributes/step -->
+    <label>Edad</label>
+    <input type="number" id="edad"
+           placeholder="Ej: 25"
+           min="1" max="120" step="1"/>
+
+    <!-- ⑦ CAMPO DE FECHA
+         type="date" muestra un selector de calendario nativo del navegador.
+         min="1950-01-01" → no permite fechas anteriores a 1950.
+         max="2010-12-31" → no permite fechas posteriores a 2010.
+         El formato siempre es YYYY-MM-DD internamente.
+         Ref: https://developer.mozilla.org/es/docs/Web/HTML/Element/input/date -->
+    <label>Fecha de nacimiento</label>
+    <input type="date" id="fecha"
+           min="1950-01-01"
+           max="2010-12-31"/>
+
+    <!-- ⑧ LISTA DESPLEGABLE (SELECT)
+         <select> crea un menú desplegable con opciones predefinidas.
+         Cada <option> es una opción seleccionable.
+         value="" → el valor que se envía (puede diferir del texto visible).
+         disabled → el usuario no puede seleccionar esta opción.
+         selected → esta opción aparece seleccionada por defecto.
+         NOTA: Si hay dos "selected", el navegador usa el último.
+         Ref select: https://developer.mozilla.org/es/docs/Web/HTML/Element/select
+         Ref option: https://developer.mozilla.org/es/docs/Web/HTML/Element/option
+         Ref disabled: https://developer.mozilla.org/es/docs/Web/HTML/Attributes/disabled
+         Ref selected: https://developer.mozilla.org/es/docs/Web/HTML/Element/option#selected -->
+    <label>Género</label>
+    <select id="genero">
+      <option value="" disabled selected>Selecciona...</option>
+      <option value="F">Femenino</option>
+      <option value="M" selected>Masculino</option>
+      <option value="O" disabled>Otro</option>
+    </select>
+
+    <!-- ⑨ CAMPO DE CONTRASEÑA
+         type="password" oculta los caracteres con puntos (•••••).
+         minlength="6" → requiere al menos 6 caracteres (validación HTML nativa).
+         maxlength="20" → máximo 20 caracteres.
+         Ref: https://developer.mozilla.org/es/docs/Web/HTML/Element/input/password
+         Ref minlength: https://developer.mozilla.org/es/docs/Web/HTML/Attributes/minlength -->
+    <label>Contraseña</label>
+    <input type="password" id="password"
+           placeholder="Mínimo 6 caracteres"
+           minlength="6" maxlength="20"/>
+
+    <!-- type="button" crea un botón que NO envía el formulario.
+         A diferencia de type="submit", no dispara el evento submit.
+         Se usa para acciones personalizadas con JavaScript.
+         Ref: https://developer.mozilla.org/es/docs/Web/HTML/Element/input/button -->
+    <button type="button" id="btnVer">
+      Ver contraseña
+    </button>
+
+    <!-- ⑩ TEXTAREA - Campo de texto multilínea
+         <textarea> permite escribir textos largos con saltos de línea.
+         rows="3" → altura visible de 3 líneas (el usuario puede escribir más).
+         maxlength="500" → máximo 500 caracteres.
+         Ref: https://developer.mozilla.org/es/docs/Web/HTML/Element/textarea -->
+    <label>Mensaje (opcional)</label>
+    <textarea id="mensaje" rows="3"
+              placeholder="Escribe algo..."
+              maxlength="500"></textarea>
+
+    <!-- ⑪ CONTENEDOR DE ERRORES
+         <div> vacío que será llenado dinámicamente por JavaScript (validacion.js)
+         cuando la validación falle. Se usa innerHTML para insertar los mensajes.
+         Ref div: https://developer.mozilla.org/es/docs/Web/HTML/Element/div -->
+    <div id="errores"></div>
+
+    <!-- ⑫ BOTONES DEL FORMULARIO
+         type="submit" → al hacer click dispara el evento "submit" del formulario.
+         validacion.js intercepta este evento con addEventListener('submit', ...).
+         type="reset" → limpia TODOS los campos del formulario a sus valores iniciales.
+         No requiere JavaScript, es comportamiento nativo del navegador.
+         Ref submit: https://developer.mozilla.org/es/docs/Web/HTML/Element/input/submit
+         Ref reset: https://developer.mozilla.org/es/docs/Web/HTML/Element/input/reset -->
+    <button type="submit">Enviar formulario</button>
+    <button type="reset">Limpiar</button>
+  </form>
+</div>
+
+<!-- ⑬ SCRIPT DE VALIDACIÓN
+     Se carga al final del <body> para asegurar que todos los elementos HTML
+     ya existan en el DOM antes de que JavaScript intente acceder a ellos.
+     Ref: https://developer.mozilla.org/es/docs/Web/HTML/Element/script -->
+<script src="validacion.js"></script>
+</body>
+</html>
